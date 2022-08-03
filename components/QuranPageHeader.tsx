@@ -3,6 +3,8 @@ import React from 'react';
 import {Animated, StyleSheet, Text} from 'react-native';
 import {State} from '../redux/store';
 import {useSelector} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons'; //https://ionic.io/ionicons
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; //https://materialdesignicons.com/
 
 const QuranPageHeader = () => {
   const navigation = useNavigation();
@@ -10,12 +12,14 @@ const QuranPageHeader = () => {
 
   return (
     <Animated.View style={{...styles.header, top: showHeader ? 0 : -100}}>
-      <Text
+      <Ionicons
+        name={'arrow-back'}
+        style={styles.backArrow}
+        size={24}
         onPress={() => {
           navigation.goBack();
-        }}>
-        -----
-      </Text>
+        }}
+      />
     </Animated.View>
   );
 };
@@ -31,5 +35,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     height: 55,
+    opacity: 0.8,
+  },
+  backArrow: {
+    width: 24,
   },
 });

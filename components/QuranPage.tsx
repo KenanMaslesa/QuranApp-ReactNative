@@ -7,6 +7,7 @@ import {
   Platform,
   Image,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import uuid from 'react-native-uuid';
@@ -19,6 +20,7 @@ import {PageInfo, QuranData, Word} from '../models/models';
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
 import {headerActions} from '../redux/slices/headerSlice';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -97,66 +99,69 @@ const QuranPage: React.FC<{page: number}> = props => {
     <>
       {/* <StatusBar hidden={true} /> */}
 
-      <Text style={styles.suraInfo}>
-        {pageInfo?.sura.map((item, index) => (
-          <Text>
-            {item.bosnianTranscription}
-            {index + 1 < pageInfo.sura.length && <Text>, </Text>}
-          </Text>
+      <Pressable
+        style={styles.pressableContainer}
+        onPress={() => toggleHeader()}>
+        <Text style={styles.suraInfo}>
+          {pageInfo?.sura.map((item, index) => (
+            <Text>
+              {item.bosnianTranscription}
+              {index + 1 < pageInfo.sura.length && <Text>, </Text>}
+            </Text>
+          ))}
+        </Text>
+        <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
+
+        {quranWords?.ayahs?.map(ayah => (
+          <View style={styles.ayaLine} key={JSON.stringify(uuid.v4())}>
+            {ayah.metaData?.lineType === LineType.START_SURA && (
+              <View style={styles.surahTitleWrapper}>
+                <Image
+                  style={styles.surahTitleImage}
+                  source={require('../assets/surah_title.gif')}
+                />
+                <Text style={styles.surahTitleText}>
+                  {ayah.metaData?.suraName}
+                </Text>
+              </View>
+            )}
+
+            {ayah.metaData?.lineType === LineType.BISMILLAH && (
+              <View>
+                <Text style={styles.bismillah}>﷽</Text>
+              </View>
+            )}
+
+            {ayah.words?.length !== 0 &&
+              ayah.words?.map(word => (
+                <Text
+                  // eslint-disable-next-line react-native/no-inline-styles
+                  style={{
+                    fontSize: 25,
+                    fontFamily: `p${props.page}`,
+                    color:
+                      playingAyah === word?.ayahKey ||
+                      playingWord === word?.audio
+                        ? 'blue'
+                        : 'black',
+                  }}
+                  key={JSON.stringify(uuid.v4())}
+                  onPress={() => playAyahOrWord(word)}
+                  onLongPress={() =>
+                    playAyahOrWord({
+                      audio: word?.audio,
+                      charType: 'end',
+                      ayahKey: word?.ayahKey,
+                      codeV1: '',
+                    })
+                  }>
+                  {word?.codeV1}
+                </Text>
+              ))}
+          </View>
         ))}
-      </Text>
-      <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
-
-      {quranWords?.ayahs?.map(ayah => (
-        <View style={styles.ayaLine} key={JSON.stringify(uuid.v4())}>
-          {ayah.metaData?.lineType === LineType.START_SURA && (
-            <View style={styles.surahTitleWrapper}>
-              <Image
-                style={styles.surahTitleImage}
-                source={require('../assets/surah_title.gif')}
-              />
-              <Text style={styles.surahTitleText}>
-                {ayah.metaData?.suraName}
-              </Text>
-            </View>
-          )}
-
-          {ayah.metaData?.lineType === LineType.BISMILLAH && (
-            <View>
-              <Text onPress={() => toggleHeader()} style={styles.bismillah}>
-                ﷽
-              </Text>
-            </View>
-          )}
-
-          {ayah.words?.length !== 0 &&
-            ayah.words?.map(word => (
-              <Text
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{
-                  fontSize: 25,
-                  fontFamily: `p${props.page}`,
-                  color:
-                    playingAyah === word?.ayahKey || playingWord === word?.audio
-                      ? 'blue'
-                      : 'black',
-                }}
-                key={JSON.stringify(uuid.v4())}
-                onPress={() => playAyahOrWord(word)}
-                onLongPress={() =>
-                  playAyahOrWord({
-                    audio: word?.audio,
-                    charType: 'end',
-                    ayahKey: word?.ayahKey,
-                    codeV1: '',
-                  })
-                }>
-                {word?.codeV1}
-              </Text>
-            ))}
-        </View>
-      ))}
-      <Text style={styles.pageInfo}>{pageInfo?.pageNumber}</Text>
+        <Text style={styles.pageInfo}>{pageInfo?.pageNumber}</Text>
+      </Pressable>
     </>
   );
 };
@@ -171,17 +176,17 @@ const styles = StyleSheet.create({
   },
   juzInfo: {
     position: 'absolute',
-    top: 0,
-    right: 10,
+    top: 35,
+    right: 0,
   },
   suraInfo: {
     position: 'absolute',
-    top: 0,
-    left: 10,
+    top: 35,
+    left: 0,
   },
   pageInfo: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 35,
   },
   bismillah: {
     fontFamily: 'bismillah',
@@ -210,6 +215,11 @@ const styles = StyleSheet.create({
     width,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  pressableContainer: {
+    height,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default React.memo(QuranPage);
