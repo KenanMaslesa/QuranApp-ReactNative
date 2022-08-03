@@ -6,14 +6,19 @@ import {
   Dimensions,
   Platform,
   Image,
-  Alert,
+  ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import {useEffect, useState} from 'react';
+import uuid from 'react-native-uuid';
 
 const quranMetaData = require('@kmaslesa/quran-metadata');
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
 import {PageInfo, QuranData, Word} from '../models/models';
+import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
+import {isPlaying, playAudio} from '../utils/playAudio';
+import {useNavigation} from '@react-navigation/native';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -26,37 +31,78 @@ enum AudioCharType {
 }
 
 const QuranPage: React.FC<{page: number}> = props => {
+  console.log('QuranPage');
+  const navigation = useNavigation();
   const [quranWords, setQuranWords] = useState<QuranData>();
   const [pageInfo, setPageInfo] = useState<PageInfo>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showHeader, setShowHeader] = useState<boolean>(false);
+  const [playingAyah, setPlayingAyah] = useState<string | null>();
+  const [playingWord, setPlayingWord] = useState<string | null>();
+
   useEffect(() => {
     getQuranWordsforPage();
     getPageInfo();
   }, [props.page]);
 
   const getQuranWordsforPage = () => {
+    console.log('getQuranWordsforPage');
+    setLoading(true);
     quranWordsNpm.getWordsByPage(props.page).then((data: QuranData) => {
       setQuranWords(data);
+      setLoading(false);
     });
   };
 
   const getPageInfo = () => {
-    const pageInfo = quranMetaData.getPageInfo(props.page);
-    setPageInfo(pageInfo);
+    setPageInfo(quranMetaData.getPageInfo(props.page));
   };
 
-  const playAudio = async (ayah: Word | null) => {
-    Alert.alert(JSON.stringify(ayah?.charType));
+  const toggleHeader = () => {
+    setShowHeader(prev => !prev);
+    navigation.setOptions({
+      headerShown: showHeader,
+      tabBarStyle: {
+        display: 'none',
+      },
+    });
+  };
+
+  const playAyahOrWord = async (ayah: Word | null) => {
     let audioUrl = '';
     if (ayah?.charType === AudioCharType.WORD) {
       audioUrl = `https://audio.qurancdn.com/${ayah.audio}`;
+      setPlayingWord(ayah.audio);
     }
     if (ayah?.charType === AudioCharType.END_ICON) {
-      audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.ayahKey}.mp3`;
+      const sura_ayah = formatNumberForAudioUrl(
+        ayah.ayahKey ? ayah.ayahKey : '',
+      );
+      audioUrl = `https://www.everyayah.com/data/Alafasy_128kbps/${sura_ayah}.mp3`;
+      setPlayingAyah(ayah.ayahKey);
     }
-    console.log(audioUrl);
+    playAudio(audioUrl);
+
+    const interval = setInterval(() => {
+      if (!isPlaying()) {
+        clearInterval(interval);
+        setPlayingAyah(null);
+        setPlayingWord('-');
+      }
+    }, 1000);
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size={80} color={'gray'} />
+      </View>
+    );
+  }
   return (
     <>
+      <StatusBar hidden={true} />
+
       <Text style={styles.suraInfo}>
         {pageInfo?.sura.map((item, index) => (
           <Text>
@@ -68,7 +114,7 @@ const QuranPage: React.FC<{page: number}> = props => {
       <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
 
       {quranWords?.ayahs?.map(ayah => (
-        <View style={styles.ayaLine}>
+        <View style={styles.ayaLine} key={JSON.stringify(uuid.v4())}>
           {ayah.metaData?.lineType === LineType.START_SURA && (
             <View style={styles.surahTitleWrapper}>
               <Image
@@ -83,7 +129,9 @@ const QuranPage: React.FC<{page: number}> = props => {
 
           {ayah.metaData?.lineType === LineType.BISMILLAH && (
             <View>
-              <Text style={styles.bismillah}>﷽</Text>
+              <Text onPress={() => toggleHeader()} style={styles.bismillah}>
+                ﷽
+              </Text>
             </View>
           )}
 
@@ -93,12 +141,16 @@ const QuranPage: React.FC<{page: number}> = props => {
                 // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   fontSize: 25,
-                  color: 'black',
                   fontFamily: `p${props.page}`,
+                  color:
+                    playingAyah === word?.ayahKey || playingWord === word?.audio
+                      ? 'blue'
+                      : 'black',
                 }}
-                onPress={() => playAudio(word)}
+                key={JSON.stringify(uuid.v4())}
+                onPress={() => playAyahOrWord(word)}
                 onLongPress={() =>
-                  playAudio({
+                  playAyahOrWord({
                     audio: word?.audio,
                     charType: 'end',
                     ayahKey: word?.ayahKey,
@@ -115,7 +167,7 @@ const QuranPage: React.FC<{page: number}> = props => {
   );
 };
 
-const {width} = Dimensions.get('screen');
+const {width, height} = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   ayaLine: {
@@ -159,5 +211,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     color: 'black',
   },
+  loading: {
+    height,
+    width,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
-export default QuranPage;
+export default React.memo(QuranPage);

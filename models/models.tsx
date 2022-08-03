@@ -33,6 +33,30 @@ export interface PageInfo {
   lettersNumber: number;
 }
 
+export interface Juz {
+  id: number;
+  juzNumber: number;
+  surahs?: JuzSura[] | null;
+  firstAyahId: number;
+  lastAyahId: number;
+  numberOfAyahs: number;
+  startPage: number;
+  endPage: number;
+}
+export interface JuzSura {
+  id: number;
+  startAyah: number;
+  endAyah: number;
+  name: JuzSuraName;
+}
+export interface JuzSuraName {
+  arabic: string;
+  english: string;
+  englishTranscription: string;
+  bosnian: string;
+  bosnianTranscription: string;
+}
+
 //new
 export interface QuranData {
   ayahs?: Ayah[] | null;

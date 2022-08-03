@@ -13,8 +13,18 @@
     "@kmaslesa/holy-quran-word-by-word-min": "^1.0.2",
     "@kmaslesa/quran-metadata": "^1.0.19",
     "@kmaslesa/quran-word-by-word": "^1.0.5",
+    "@react-navigation/material-top-tabs": "^6.2.2",
+    "@react-navigation/native": "^6.0.11",
+    "@react-navigation/stack": "^6.2.2",
     "react": "18.0.0",
-    "react-native": "0.69.3"
+    "react-native": "0.69.3",
+    "react-native-gesture-handler": "^2.5.0",
+    "react-native-pager-view": "^5.4.25",
+    "react-native-safe-area-context": "^4.3.1",
+    "react-native-screens": "^3.15.0",
+    "react-native-sound": "^0.11.2",
+    "react-native-tab-view": "^3.1.1",
+    "react-native-uuid": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
