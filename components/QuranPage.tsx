@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import uuid from 'react-native-uuid';
+import {useDispatch, useSelector} from 'react-redux';
 
 const quranMetaData = require('@kmaslesa/quran-metadata');
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
@@ -19,6 +20,8 @@ import {PageInfo, QuranData, Word} from '../models/models';
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
 import {useNavigation} from '@react-navigation/native';
+import {State} from '../redux/store';
+import {headerActions} from '../redux/slices/headerSlice';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -33,12 +36,14 @@ enum AudioCharType {
 const QuranPage: React.FC<{page: number}> = props => {
   console.log('QuranPage');
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [quranWords, setQuranWords] = useState<QuranData>();
   const [pageInfo, setPageInfo] = useState<PageInfo>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [showHeader, setShowHeader] = useState<boolean>(false);
   const [playingAyah, setPlayingAyah] = useState<string | null>();
   const [playingWord, setPlayingWord] = useState<string | null>();
+  const showHeader = useSelector((state: State) => state.header.showHeader);
 
   useEffect(() => {
     getQuranWordsforPage();
@@ -59,7 +64,7 @@ const QuranPage: React.FC<{page: number}> = props => {
   };
 
   const toggleHeader = () => {
-    setShowHeader(prev => !prev);
+    dispatch(headerActions.toggleHeader());
     navigation.setOptions({
       headerShown: showHeader,
       tabBarStyle: {
