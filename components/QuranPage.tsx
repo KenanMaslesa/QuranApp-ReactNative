@@ -7,11 +7,10 @@ import {
   Platform,
   Image,
   ActivityIndicator,
-  StatusBar,
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import uuid from 'react-native-uuid';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const quranMetaData = require('@kmaslesa/quran-metadata');
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
@@ -19,8 +18,6 @@ const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 import {PageInfo, QuranData, Word} from '../models/models';
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
-import {useNavigation} from '@react-navigation/native';
-import {State} from '../redux/store';
 import {headerActions} from '../redux/slices/headerSlice';
 
 enum LineType {
@@ -35,7 +32,6 @@ enum AudioCharType {
 
 const QuranPage: React.FC<{page: number}> = props => {
   console.log('QuranPage');
-  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const [quranWords, setQuranWords] = useState<QuranData>();
@@ -43,7 +39,6 @@ const QuranPage: React.FC<{page: number}> = props => {
   const [loading, setLoading] = useState<boolean>(true);
   const [playingAyah, setPlayingAyah] = useState<string | null>();
   const [playingWord, setPlayingWord] = useState<string | null>();
-  const showHeader = useSelector((state: State) => state.header.showHeader);
 
   useEffect(() => {
     getQuranWordsforPage();
@@ -65,12 +60,6 @@ const QuranPage: React.FC<{page: number}> = props => {
 
   const toggleHeader = () => {
     dispatch(headerActions.toggleHeader());
-    navigation.setOptions({
-      headerShown: showHeader,
-      tabBarStyle: {
-        display: 'none',
-      },
-    });
   };
 
   const playAyahOrWord = async (ayah: Word | null) => {
@@ -106,7 +95,7 @@ const QuranPage: React.FC<{page: number}> = props => {
   }
   return (
     <>
-      <StatusBar hidden={true} />
+      {/* <StatusBar hidden={true} /> */}
 
       <Text style={styles.suraInfo}>
         {pageInfo?.sura.map((item, index) => (

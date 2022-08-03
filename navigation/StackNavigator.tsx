@@ -1,12 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import QuranScreen from '../screens/QuranScreen';
 import TopTabsNavigator from './TopTabsNavigator';
 import QuranPageHeader from '../components/QuranPageHeader';
+import SplashScreen from '../components/SplashScreen';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
+  const [appIsLoading, setAppIsLoading] = useState(true);
+
+  useEffect(() => {
+    setAppIsLoading(false);
+  }, []);
+
+  if (appIsLoading) {
+    return <SplashScreen />;
+  }
+
   return (
     <Stack.Navigator initialRouteName="TopTabsNavigator">
       <Stack.Screen
@@ -21,7 +32,7 @@ const StackNavigator = () => {
         component={QuranScreen}
         options={{
           header: () => <QuranPageHeader />,
-          headerShown: false,
+          headerShown: true,
         }}
       />
     </Stack.Navigator>
