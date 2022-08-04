@@ -13,3 +13,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 <Ionicons name={'arrow-back'} size={120} color={primary} />
 
 ```
+
+FLAT LIST OPTIMIZATION
+https://reactnative.dev/docs/optimizing-flatlist-configuration

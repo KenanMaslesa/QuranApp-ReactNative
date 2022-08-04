@@ -1,7 +1,24 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {SuraName} from '../../models/models';
 
-const initialState = {
+export interface HeaderSlice {
+  showHeader: boolean;
+  pageInfo: HeaderPageInfo;
+}
+
+export interface HeaderPageInfo {
+  currentSura: SuraName[];
+  currentPage: number;
+  currentJuz: number;
+}
+
+const initialState: HeaderSlice = {
   showHeader: false,
+  pageInfo: {
+    currentSura: [],
+    currentPage: 1,
+    currentJuz: 1,
+  },
 };
 
 const headerSlice = createSlice({
@@ -13,6 +30,9 @@ const headerSlice = createSlice({
     },
     toggleHeader: state => {
       state.showHeader = !state.showHeader;
+    },
+    setPageInfo: (state, {payload}: PayloadAction<HeaderPageInfo>) => {
+      state.pageInfo = payload;
     },
   },
 });

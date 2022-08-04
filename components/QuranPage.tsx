@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   Text,
   View,
@@ -10,17 +10,15 @@ import {
   Pressable,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import uuid from 'react-native-uuid';
 import {useDispatch} from 'react-redux';
 
-const quranMetaData = require('@kmaslesa/quran-metadata');
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
 import {PageInfo, QuranData, Word} from '../models/models';
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
 import {headerActions} from '../redux/slices/headerSlice';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {QuranService} from '../services/QuranService';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -47,18 +45,18 @@ const QuranPage: React.FC<{page: number}> = props => {
     getPageInfo();
   }, [props.page]);
 
-  const getQuranWordsforPage = () => {
+  const getQuranWordsforPage = useCallback(() => {
     console.log('getQuranWordsforPage');
     setLoading(true);
     quranWordsNpm.getWordsByPage(props.page).then((data: QuranData) => {
       setQuranWords(data);
       setLoading(false);
     });
-  };
+  }, [props.page]);
 
-  const getPageInfo = () => {
-    setPageInfo(quranMetaData.getPageInfo(props.page));
-  };
+  const getPageInfo = useCallback(() => {
+    setPageInfo(QuranService.getPageInfo(props.page));
+  }, [props.page]);
 
   const toggleHeader = () => {
     dispatch(headerActions.toggleHeader());
@@ -104,7 +102,7 @@ const QuranPage: React.FC<{page: number}> = props => {
         onPress={() => toggleHeader()}>
         <Text style={styles.suraInfo}>
           {pageInfo?.sura.map((item, index) => (
-            <Text>
+            <Text key={item.bosnian}>
               {item.bosnianTranscription}
               {index + 1 < pageInfo.sura.length && <Text>, </Text>}
             </Text>
@@ -112,8 +110,8 @@ const QuranPage: React.FC<{page: number}> = props => {
         </Text>
         <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
 
-        {quranWords?.ayahs?.map(ayah => (
-          <View style={styles.ayaLine} key={JSON.stringify(uuid.v4())}>
+        {quranWords?.ayahs?.map((ayah, ayahIndex) => (
+          <View style={styles.ayaLine} key={`ayah:${ayahIndex}`}>
             {ayah.metaData?.lineType === LineType.START_SURA && (
               <View style={styles.surahTitleWrapper}>
                 <Image
@@ -145,7 +143,7 @@ const QuranPage: React.FC<{page: number}> = props => {
                         ? 'blue'
                         : 'black',
                   }}
-                  key={JSON.stringify(uuid.v4())}
+                  key={word?.codeV1}
                   onPress={() => playAyahOrWord(word)}
                   onLongPress={() =>
                     playAyahOrWord({

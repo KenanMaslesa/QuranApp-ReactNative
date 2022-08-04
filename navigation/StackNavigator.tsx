@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import QuranScreen from '../screens/QuranScreen';
 import TopTabsNavigator from './TopTabsNavigator';
 import QuranPageHeader from '../components/QuranPageHeader';
@@ -19,7 +19,11 @@ const StackNavigator = () => {
   }
 
   return (
-    <Stack.Navigator initialRouteName="TopTabsNavigator">
+    <Stack.Navigator
+      initialRouteName="TopTabsNavigator"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
       <Stack.Screen
         name="TopTabsNavigator"
         component={TopTabsNavigator}
