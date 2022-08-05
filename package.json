@@ -10,9 +10,10 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@kmaslesa/holy-quran-word-by-word-min": "^1.0.2",
+    "@kmaslesa/holy-quran-word-by-word-min": "^1.0.3",
     "@kmaslesa/quran-metadata": "^1.0.19",
     "@kmaslesa/quran-word-by-word": "^1.0.5",
+    "@react-native-async-storage/async-storage": "^1.17.7",
     "@react-navigation/material-top-tabs": "^6.2.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/stack": "^6.2.2",

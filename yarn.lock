@@ -1065,10 +1065,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kmaslesa/holy-quran-word-by-word-min@^1.0.2":
-  "integrity" "sha512-FMNF2MLDPwRo1pDS3053KGyjqI7VpfmshPhm9Mv0jQuqz7J/RPMJyGwA1RAGI8XnDf5F82NbgcuALXBiACK2pA=="
-  "resolved" "https://registry.npmjs.org/@kmaslesa/holy-quran-word-by-word-min/-/holy-quran-word-by-word-min-1.0.2.tgz"
-  "version" "1.0.2"
+"@kmaslesa/holy-quran-word-by-word-min@^1.0.3":
+  "integrity" "sha512-kSMGIQlqrdo7CASBt9n2xqYA/8CpJCDynD3CfJmu1i9Yu7w1TuTHTX6DtQwaXgrehCkHH5pmFKcowBOdOM0OBQ=="
+  "resolved" "https://registry.npmjs.org/@kmaslesa/holy-quran-word-by-word-min/-/holy-quran-word-by-word-min-1.0.3.tgz"
+  "version" "1.0.3"
 
 "@kmaslesa/quran-metadata@^1.0.19":
   "integrity" "sha512-mRvOXnz8efAXzTM7YToKsUTLeNDdJHi2kmWOtaPoYCP27TIa22tRVv6UEXWy0HMld1QyimLr3/9B+Uw/csmIaQ=="
@@ -1100,6 +1100,13 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
+
+"@react-native-async-storage/async-storage@^1.17.7":
+  "integrity" "sha512-mDtWhCcpxzrZhA95f6zi0pnBsjBEZW1LKZWfxVXG0UfaWpPxDBCKowNk2xjRTytckZeVhjmPJPtBU+8QNQcR0A=="
+  "resolved" "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.17.7.tgz"
+  "version" "1.17.7"
+  dependencies:
+    "merge-options" "^3.0.4"
 
 "@react-native-community/cli-clean@^8.0.4":
   "integrity" "sha512-IwS1M1NHg6+qL8PThZYMSIMYbZ6Zbx+lIck9PLBskbosFo24M3lCOflOl++Bggjakp6mR+sRXxLMexid/GeOsQ=="
@@ -3989,6 +3996,11 @@
   "resolved" "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
   "version" "7.0.0"
 
+"is-plain-obj@^2.1.0":
+  "integrity" "sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA=="
+  "resolved" "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-2.1.0.tgz"
+  "version" "2.1.0"
+
 "is-plain-object@^2.0.3", "is-plain-object@^2.0.4":
   "integrity" "sha512-h5PpgXkWitc38BBMYawTYMWJHFZJVnBquFE57xFpjB8pJFiF6gZ+bU+WyI/yqXiFR5mdLsgYNaPe8uao6Uv9Og=="
   "resolved" "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
@@ -4921,6 +4933,13 @@
   "integrity" "sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q=="
   "resolved" "https://registry.npmjs.org/memoize-one/-/memoize-one-5.2.1.tgz"
   "version" "5.2.1"
+
+"merge-options@^3.0.4":
+  "integrity" "sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ=="
+  "resolved" "https://registry.npmjs.org/merge-options/-/merge-options-3.0.4.tgz"
+  "version" "3.0.4"
+  dependencies:
+    "is-plain-obj" "^2.1.0"
 
 "merge-stream@^2.0.0":
   "integrity" "sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w=="
