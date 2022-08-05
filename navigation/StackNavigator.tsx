@@ -3,7 +3,6 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import QuranScreen from '../screens/QuranScreen';
 import TopTabsNavigator from './TopTabsNavigator';
 import QuranPageHeader from '../components/QuranPageHeader';
-import SplashScreen from '../components/SplashScreen';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +14,7 @@ const StackNavigator = () => {
   }, []);
 
   if (appIsLoading) {
-    return <SplashScreen />;
+    // return <SplashScreen />;
   }
 
   return (
