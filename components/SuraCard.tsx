@@ -8,7 +8,6 @@ import {useDispatch} from 'react-redux';
 
 import {quranActions} from '../redux/slices/quranSlice';
 import chapterBg from '../assets/images/chapter-number-blue.png';
-import PushNotification from 'react-native-push-notification';
 
 const SuraCard: React.FC<{sura: Sura}> = props => {
   const navigation = useNavigation();
@@ -23,33 +22,9 @@ const SuraCard: React.FC<{sura: Sura}> = props => {
     }, 1);
   };
 
-  const handleNotification = () => {
-    // PushNotification.cancelAllLocalNotifications();
-
-    PushNotification.localNotification({
-      channelId: 'test-channel',
-      title: props.sura.name.bosnianTranscription,
-      message: props.sura.aboutSura.bosnian,
-      bigPictureUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFRmId_GNuq_B0X7lWopUt0PO0Zqpt8w01mRLeBKKQb2gprP3h9GN3TPPkPubI91lxbiY&usqp=CAU',
-      bigLargeIconUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFRmId_GNuq_B0X7lWopUt0PO0Zqpt8w01mRLeBKKQb2gprP3h9GN3TPPkPubI91lxbiY&usqp=CAU',
-    });
-
-    PushNotification.localNotificationSchedule({
-      channelId: 'test-channel',
-      repeatType: 'minute',
-      repeatTime: 5,
-      title: 'Title',
-      message: 'Message',
-      date: new Date(Date.now() + 2 * 1000),
-      allowWhileIdle: true,
-    });
-  };
-
   return (
     <>
-      <TouchableOpacity style={styles.listItem} onPress={handleNotification}>
+      <TouchableOpacity style={styles.listItem} onPress={viewSura}>
         <ImageBackground
           source={chapterBg}
           resizeMode="cover"

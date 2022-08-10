@@ -5,10 +5,16 @@ import JuzScreen from '../screens/JuzScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
 import HomeHeader from '../components/HomeHeader';
 import {SCREENS} from '../screens/constants';
+import {useEffect} from 'react';
+import {CHANNELS, NotificationService} from '../services/notifications';
 
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabsNavigator = () => {
+  useEffect(() => {
+    NotificationService.createChannel(CHANNELS.Quran);
+  }, []);
+
   return (
     <>
       <HomeHeader />
