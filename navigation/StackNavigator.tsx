@@ -1,44 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import QuranScreen from '../screens/QuranScreen';
 import TopTabsNavigator from './TopTabsNavigator';
 import QuranPageHeader from '../components/QuranPageHeader';
+import SettingsScreen from '../screens/SettingsScreen';
+import {SCREENS} from '../screens/constants';
+import Loader from '../components/Loader';
+import {useSelector} from 'react-redux';
+import {State} from '../redux/store';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
-  const [appIsLoading, setAppIsLoading] = useState(true);
-
-  useEffect(() => {
-    setAppIsLoading(false);
-  }, []);
-
-  if (appIsLoading) {
-    // return <SplashScreen />;
-  }
-
+  const showHeader = useSelector((state: State) => state.header.showHeader);
   return (
-    <Stack.Navigator
-      initialRouteName="TopTabsNavigator"
-      screenOptions={{
-        ...TransitionPresets.SlideFromRightIOS,
-      }}>
-      <Stack.Screen
-        name="TopTabsNavigator"
-        component={TopTabsNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Quran"
-        component={QuranScreen}
-        options={{
-          header: () => <QuranPageHeader />,
-          headerShown: true,
-        }}
-      />
-    </Stack.Navigator>
+    <>
+      <Loader />
+
+      <Stack.Navigator
+        initialRouteName={SCREENS.TOP_TAB_NAVIGATOR}
+        screenOptions={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}>
+        <Stack.Screen
+          name={SCREENS.TOP_TAB_NAVIGATOR}
+          component={TopTabsNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={SCREENS.QURAN_SCREEN}
+          component={QuranScreen}
+          options={{
+            header: () => (showHeader ? <QuranPageHeader /> : null),
+          }}
+        />
+        <Stack.Screen
+          name={SCREENS.SETTINGS_SCREEN}
+          component={SettingsScreen}
+        />
+      </Stack.Navigator>
+    </>
   );
 };
 

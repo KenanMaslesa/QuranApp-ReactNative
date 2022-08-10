@@ -10,15 +10,16 @@ import {
   Pressable,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
-import {PageInfo, QuranData, Word} from '../models/models';
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
 import {headerActions} from '../redux/slices/headerSlice';
 import {QuranService} from '../services/QuranService';
+import {Ayah, PageInfo, QuranData, Word} from '../shared/models';
+import {State} from '../redux/store';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -30,8 +31,12 @@ enum AudioCharType {
   END_ICON = 'end',
 }
 
-const QuranPage: React.FC<{page: number}> = props => {
-  console.log('QuranPage');
+interface QuranPageProps {
+  page: number;
+  isDarkTheme: boolean;
+}
+
+const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
   const dispatch = useDispatch();
 
   const [quranWords, setQuranWords] = useState<QuranData>();
@@ -39,24 +44,25 @@ const QuranPage: React.FC<{page: number}> = props => {
   const [loading, setLoading] = useState<boolean>(true);
   const [playingAyah, setPlayingAyah] = useState<string | null>();
   const [playingWord, setPlayingWord] = useState<string | null>();
+  const quranFontSize = useSelector((state: State) => state.quran.fontSize);
 
   useEffect(() => {
     getQuranWordsforPage();
     getPageInfo();
-  }, [props.page]);
+  }, []);
 
   const getQuranWordsforPage = useCallback(() => {
     console.log('getQuranWordsforPage');
     setLoading(true);
-    quranWordsNpm.getWordsByPage(props.page).then((data: QuranData) => {
+    quranWordsNpm.getWordsByPage(page).then((data: QuranData) => {
       setQuranWords(data);
       setLoading(false);
     });
-  }, [props.page]);
+  }, [page]);
 
   const getPageInfo = useCallback(() => {
-    setPageInfo(QuranService.getPageInfo(props.page));
-  }, [props.page]);
+    setPageInfo(QuranService.getPageInfo(page));
+  }, [page]);
 
   const toggleHeader = () => {
     dispatch(headerActions.toggleHeader());
@@ -83,7 +89,7 @@ const QuranPage: React.FC<{page: number}> = props => {
         setPlayingAyah(null);
         setPlayingWord('-');
       }
-    }, 1000);
+    }, 2000);
   };
 
   if (loading) {
@@ -110,7 +116,7 @@ const QuranPage: React.FC<{page: number}> = props => {
         </Text>
         <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
 
-        {quranWords?.ayahs?.map((ayah, ayahIndex) => (
+        {quranWords?.ayahs?.map((ayah: Ayah, ayahIndex: number) => (
           <View style={styles.ayaLine} key={`ayah:${ayahIndex}`}>
             {ayah.metaData?.lineType === LineType.START_SURA && (
               <View style={styles.surahTitleWrapper}>
@@ -118,7 +124,7 @@ const QuranPage: React.FC<{page: number}> = props => {
                   style={styles.surahTitleImage}
                   source={require('../assets/surah_title.gif')}
                 />
-                <Text style={styles.surahTitleText}>
+                <Text style={styles.surahTitleText(isDarkTheme)}>
                   {ayah.metaData?.suraName}
                 </Text>
               </View>
@@ -135,12 +141,14 @@ const QuranPage: React.FC<{page: number}> = props => {
                 <Text
                   // eslint-disable-next-line react-native/no-inline-styles
                   style={{
-                    fontSize: 25,
-                    fontFamily: `p${props.page}`,
+                    fontSize: quranFontSize,
+                    fontFamily: `p${page}`,
                     color:
                       playingAyah === word?.ayahKey ||
                       playingWord === word?.audio
                         ? 'blue'
+                        : isDarkTheme
+                        ? 'white'
                         : 'black',
                   }}
                   key={word?.codeV1}
@@ -175,12 +183,12 @@ const styles = StyleSheet.create({
   juzInfo: {
     position: 'absolute',
     top: 35,
-    right: 0,
+    right: 10,
   },
   suraInfo: {
     position: 'absolute',
     top: 35,
-    left: 0,
+    left: 10,
   },
   pageInfo: {
     position: 'absolute',
@@ -204,10 +212,10 @@ const styles = StyleSheet.create({
     width: width - 20,
     height: 40,
   },
-  surahTitleText: {
+  surahTitleText: (isDarkTheme: boolean) => ({
     position: 'absolute',
-    color: 'black',
-  },
+    color: isDarkTheme ? 'white' : 'black',
+  }),
   loading: {
     height,
     width,

@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
-import {Button, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Button, Pressable, ScrollView, StyleSheet, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getBookmarks} from '../redux/actions/bookmarksActions';
-import {bookmarkActions} from '../redux/slices/bookmarkSlice';
+import {bookmarkActions} from '../redux/slices/bookmarksSlice';
 import {State} from '../redux/store';
 import {AsyncStorageService} from '../services/AsyncStorageService';
 import {ASYNC_STORAGE_KEYS} from '../shared/AsyncStorageKeys';
 import {Bookmark} from '../shared/models';
+import {SCREENS} from './constants';
 
 const BookmarkScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const BookmarkScreen = ({navigation}: any) => {
   }, [dispatch]);
 
   return (
-    <View>
+    <ScrollView>
       <>
         <Button title="remove all" onPress={removeAllBookmarsk} />
         {bookmarks.map((bookmark: Bookmark) => (
@@ -30,7 +31,7 @@ const BookmarkScreen = ({navigation}: any) => {
             style={styles.bookmarkItem}
             key={bookmark.pageNumber}
             onPress={() => {
-              navigation.navigate('Quran', {
+              navigation.navigate(SCREENS.QURAN_SCREEN, {
                 startPage: bookmark.pageNumber,
               });
             }}>
@@ -40,7 +41,7 @@ const BookmarkScreen = ({navigation}: any) => {
           </Pressable>
         ))}
       </>
-    </View>
+    </ScrollView>
   );
 };
 

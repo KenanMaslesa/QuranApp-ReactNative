@@ -5,6 +5,7 @@ import {FlatList, View} from 'react-native';
 import {Sura} from '../models/models';
 import SuraCard from './SuraCard';
 import Loader from './Loader';
+import PushNotification from 'react-native-push-notification';
 
 const quranMetaData = require('@kmaslesa/quran-metadata');
 
@@ -14,7 +15,18 @@ const SuraList = () => {
   useEffect(() => {
     const response = quranMetaData.getSuraList();
     setSuraList(response);
+    createChannels();
   }, []);
+
+  const createChannels = () => {
+    PushNotification.createChannel(
+      {
+        channelId: 'test-channel',
+        channelName: 'Test Channel',
+      },
+      () => {},
+    );
+  };
 
   return (
     <View>

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Alert, Text} from 'react-native';
-import {Ayah, QuranData, Word} from '../models/models';
+import {Ayah, QuranData, Word} from './transformQuranData';
 const quranWordsNpm = require('@kmaslesa/quran-word-by-word');
 
 let page = 1;

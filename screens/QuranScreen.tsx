@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useRef} from 'react';
 import {StyleSheet, FlatList, View, ScrollView, Dimensions} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import QuranPage from '../components/QuranPage';
-import {PageInfo} from '../models/models';
+import QuranTranslationBottomSheet from '../components/QuranTranslationBottomSheet';
 import {headerActions} from '../redux/slices/headerSlice';
+import {quranActions} from '../redux/slices/quranSlice';
+import {State} from '../redux/store';
 import {QuranService} from '../services/QuranService';
+import {PageInfo} from '../shared/models';
 import {createArray} from '../utils/createArray';
 
 export interface FlatListViewableItem {
@@ -18,11 +21,23 @@ export interface FlatListViewableItem {
 }
 
 const QuranScreen = ({route}: any) => {
-  console.log('QuranScreen');
   const dispatch = useDispatch();
+  const isDarkTheme = useSelector((state: State) => state.settings.isDarkTheme);
+  const currentPage = useSelector((state: State) => state.quran.currentPage);
+  const showTranslation = useSelector(
+    (state: State) => state.quran.showTranslation,
+  );
 
   const pages = createArray(1, 604);
   const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    dispatch(quranActions.setLoading(false));
+    dispatch(headerActions.setShowHeader(true));
+    setTimeout(() => {
+      dispatch(headerActions.setShowHeader(false));
+    }, 3000);
+  }, []);
 
   // const scrollTo = (pageNumber: number) => {
   //   flatListRef.current?.scrollToIndex({
@@ -33,16 +48,18 @@ const QuranScreen = ({route}: any) => {
 
   const renderItem = ({item}: any) => (
     <ScrollView>
-      <View style={styles.page}>
-        <QuranPage page={item} />
+      <View style={styles.page(isDarkTheme)}>
+        <QuranPage page={item} isDarkTheme={isDarkTheme} />
       </View>
     </ScrollView>
   );
 
-  const onViewableItemsChanged = React.useRef(({viewableItems, changed}) => {
+  const onViewableItemsChanged = React.useRef(({viewableItems}: any) => {
     const visibleItems: FlatListViewableItem[] = viewableItems;
     if (visibleItems.length !== 0) {
-      getPageInfoAndSetHeaderInfo(visibleItems[visibleItems.length - 1].item);
+      const currentSlide = visibleItems[visibleItems.length - 1].item;
+      dispatch(quranActions.setCurrentPage(currentSlide));
+      getPageInfoAndSetHeaderInfo(currentSlide);
     }
   });
 
@@ -84,6 +101,9 @@ const QuranScreen = ({route}: any) => {
         keyExtractor={item => `pageId:${item}`}
         renderItem={renderItem}
       />
+      {showTranslation && (
+        <QuranTranslationBottomSheet pageNumber={currentPage} />
+      )}
     </View>
   );
 };
@@ -95,15 +115,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'scroll',
+    flex: 1,
   },
-  page: {
+  page: (isDarkTheme: boolean) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: 'gray',
     borderWidth: 0.2,
     height: height - 55,
     width,
-  },
+    backgroundColor: isDarkTheme ? 'black' : 'white',
+  }),
 });
 
 export default QuranScreen;

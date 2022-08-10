@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {SuraName} from '../../models/models';
+import {SuraName} from '../../shared/models';
 
 export interface HeaderSlice {
   showHeader: boolean;

@@ -1,7 +1,8 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Juz} from '../models/models';
+import {Juz} from '../shared/models';
+import {SCREENS} from '../screens/constants';
 
 const JuzCard: React.FC<{juz: Juz}> = props => {
   const navigation = useNavigation();
@@ -9,7 +10,7 @@ const JuzCard: React.FC<{juz: Juz}> = props => {
     <TouchableOpacity
       style={styles.suraContainer}
       onPress={() => {
-        navigation.navigate('Quran', {
+        navigation.navigate(SCREENS.QURAN_SCREEN, {
           startPage: props.juz.startPage,
         });
       }}>
