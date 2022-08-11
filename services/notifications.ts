@@ -1,9 +1,13 @@
-import PushNotification from 'react-native-push-notification';
+import PushNotification, {
+  PushNotificationScheduledLocalObject,
+} from 'react-native-push-notification';
 
 interface NotificationChannel {
   channelId: string;
   channelName: string;
 }
+
+type RepeatType = 'week' | 'day' | 'hour' | 'minute' | 'time' | undefined;
 
 export enum NotificationRepeatType {
   MONTH = 'month',
@@ -37,7 +41,7 @@ const scheduleLocalNotification = (
   channelId: string,
   title: string,
   message: string,
-  repeatType: NotificationRepeatType,
+  repeatType: RepeatType, // 2 - every two seconds/minutes/hours/days
   repeatTime: number,
   hour: number,
   minute: number,
@@ -74,9 +78,18 @@ const cancelAllLocalNotifications = () => {
   PushNotification.cancelAllLocalNotifications();
 };
 
+const getScheduledLocalNotifications = () => {
+  PushNotification.getScheduledLocalNotifications(
+    (list: PushNotificationScheduledLocalObject[]) => {
+      console.log(list);
+    },
+  );
+};
+
 export const NotificationService = {
   createChannel,
   scheduleLocalNotification,
   showNotification,
   cancelAllLocalNotifications,
+  getScheduledLocalNotifications,
 };

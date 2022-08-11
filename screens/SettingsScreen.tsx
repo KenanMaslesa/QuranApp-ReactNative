@@ -1,6 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import PushNotification, {
+  PushNotificationScheduledLocalObject,
+} from 'react-native-push-notification';
 import {
   CHANNELS,
   NotificationRepeatType,
@@ -8,6 +12,14 @@ import {
 } from '../services/notifications';
 
 const SettingsScreen = () => {
+  const [scheduledNotifications, setScheduledNotifications] = useState<
+    PushNotificationScheduledLocalObject[]
+  >([]);
+
+  useEffect(() => {
+    getScheduledNotifications();
+  }, []);
+
   const showNotification = () => {
     NotificationService.showNotification(
       CHANNELS.Quran.channelId,
@@ -20,21 +32,23 @@ const SettingsScreen = () => {
     NotificationService.scheduleLocalNotification(
       CHANNELS.Quran.channelId,
       'Večernji zikr 🌙',
-      'Vrijeme je za večernji zikr 17:10',
-      NotificationRepeatType.DAY,
-      1,
-      17,
-      10,
+      'Vrijeme je za večernji zikr',
+      NotificationRepeatType.HOUR,
+      1, // 2 - every two seconds/minutes/hours/days
+      new Date().getHours(),
+      new Date().getMinutes() + 5,
     );
+  };
 
+  const scheduleLocalNotificationEvery5Minutes = () => {
     NotificationService.scheduleLocalNotification(
       CHANNELS.Quran.channelId,
-      'Jutarnji zikr 🌞',
-      'Vrijeme je za jutarnji zikr 05:00',
-      NotificationRepeatType.DAY,
-      1,
+      'Večernji zikr 🌙',
+      'Vrijeme je za večernji zikr',
+      NotificationRepeatType.MINUTE,
       5,
-      0,
+      new Date().getHours(),
+      new Date().getMinutes() + 5,
     );
   };
 
@@ -42,14 +56,50 @@ const SettingsScreen = () => {
     NotificationService.cancelAllLocalNotifications();
   };
 
+  const getScheduledNotifications = () => {
+    PushNotification.getScheduledLocalNotifications(
+      (list: PushNotificationScheduledLocalObject[]) => {
+        setScheduledNotifications(list);
+      },
+    );
+  };
+
   return (
-    <View>
-      <Text style={styles.button} onPress={() => showNotification()}>show notification</Text>
-      <Text style={styles.button} onPress={() => scheduleLocalNotification()}>
-        schedule notification
-      </Text>
-      <Text style={styles.button} onPress={() => cancelAllLocalNotifications()}>cancel All Local Notifications</Text>
-    </View>
+    <ScrollView>
+      <View>
+        <Text style={styles.button} onPress={() => showNotification()}>
+          show notification
+        </Text>
+        <Text style={styles.button} onPress={() => scheduleLocalNotification()}>
+          schedule notification every hour
+        </Text>
+        <Text
+          style={styles.button}
+          onPress={() => scheduleLocalNotificationEvery5Minutes()}>
+          schedule notification every 5 minutes
+        </Text>
+        <Text
+          style={styles.button}
+          onPress={() => cancelAllLocalNotifications()}>
+          cancel All Local Notifications
+        </Text>
+
+        <Text style={styles.button} onPress={() => getScheduledNotifications()}>
+          getScheduledNotifications
+        </Text>
+        {scheduledNotifications.map(notification => (
+          <View style={styles.notification}>
+            <Text>
+              {notification.title} - {notification.message}
+            </Text>
+            <Text>
+              {notification.date.toDateString()}---
+              {notification.date.toLocaleTimeString()}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -63,5 +113,10 @@ const styles = StyleSheet.create({
     padding: 20,
     textAlign: 'center',
     borderRadius: 30,
+  },
+  notification: {
+    padding: 20,
+    backgroundColor: 'lightgray',
+    alignItems: 'center',
   },
 });
