@@ -1,9 +1,19 @@
 const quranMetaData = require('@kmaslesa/quran-metadata');
 
-export const getPageInfo = (pageNumber: number) => {
+const getPageInfo = (pageNumber: number) => {
   return quranMetaData.getPageInfo(pageNumber);
 };
 
-export const QuranService = {
+const getJuzList = () => {
+  return quranMetaData.getJuzList();
+};
+
+const getSuraList = () => {
+  return quranMetaData.getSuraList();
+};
+
+export const quranService = {
   getPageInfo,
+  getJuzList,
+  getSuraList,
 };

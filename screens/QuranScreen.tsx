@@ -8,11 +8,11 @@ import QuranTranslationBottomSheet from '../components/QuranTranslationBottomShe
 import {headerActions} from '../redux/slices/headerSlice';
 import {quranActions} from '../redux/slices/quranSlice';
 import {State} from '../redux/store';
-import {QuranService} from '../services/QuranService';
+import {quranService} from '../services/quranService';
 import {PageInfo} from '../shared/models';
 import {createArray} from '../utils/createArray';
 
-export interface FlatListViewableItem {
+interface FlatListViewableItem {
   index: number;
   isViewable: boolean;
   item: number;
@@ -68,7 +68,7 @@ const QuranScreen = ({route}: any) => {
   };
 
   const getPageInfoAndSetHeaderInfo = (pageNumber: number) => {
-    const pageInfo = QuranService.getPageInfo(pageNumber) as PageInfo;
+    const pageInfo = quranService.getPageInfo(pageNumber) as PageInfo;
     dispatch(
       headerActions.setPageInfo({
         currentJuz: pageInfo.juz,

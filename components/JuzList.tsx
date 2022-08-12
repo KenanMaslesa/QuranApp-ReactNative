@@ -2,18 +2,16 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 
-import {Juz} from '../models/models';
 import Loader from './Loader';
 import JuzCard from './JuzCard';
-
-const quranMetaData = require('@kmaslesa/quran-metadata');
+import {Juz} from '../shared/models';
+import {quranService} from '../services/quranService';
 
 const JuzList = () => {
   const [juzList, setJuzList] = useState<Juz[]>();
 
   useEffect(() => {
-    const response = quranMetaData.getJuzList();
-    setJuzList(response);
+    setJuzList(quranService.getJuzList());
   }, []);
 
   return (

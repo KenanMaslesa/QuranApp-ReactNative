@@ -6,12 +6,10 @@ import {quranActions} from '../redux/slices/quranSlice';
 
 const quranTranslation = require('@kmaslesa/quran-translations');
 
-interface QuranTranslationBottomSheetProps {
+interface QuranTranslationProps {
   pageNumber: number;
 }
-const QuranTranslationBottomSheet = ({
-  pageNumber,
-}: QuranTranslationBottomSheetProps) => {
+const QuranTranslationBottomSheet = ({pageNumber}: QuranTranslationProps) => {
   const modalizeRef = useRef<Modalize>(null);
   const [translations, setTranslations] = useState([]);
   const dispatch = useDispatch();

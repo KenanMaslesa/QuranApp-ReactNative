@@ -9,7 +9,10 @@ import {useDispatch} from 'react-redux';
 import {quranActions} from '../redux/slices/quranSlice';
 import chapterBg from '../assets/images/chapter-number-blue.png';
 
-const SuraCard: React.FC<{sura: Sura}> = props => {
+interface SuraCardProps {
+  sura: Sura;
+}
+const SuraCard = ({sura}: SuraCardProps) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -17,7 +20,7 @@ const SuraCard: React.FC<{sura: Sura}> = props => {
     dispatch(quranActions.setLoading(true));
     setTimeout(() => {
       navigation.navigate(SCREENS.QURAN_SCREEN, {
-        startPage: props.sura.startPage,
+        startPage: sura.startPage,
       });
     }, 1);
   };
@@ -29,21 +32,19 @@ const SuraCard: React.FC<{sura: Sura}> = props => {
           source={chapterBg}
           resizeMode="cover"
           style={styles.chapterNumber}>
-          <Text style={styles.chapterNumberText}>{props.sura.index}</Text>
+          <Text style={styles.chapterNumberText}>{sura.index}</Text>
         </ImageBackground>
         <View style={{flexGrow: 1}}>
-          <Text style={styles.name}>
-            {props.sura.name.bosnianTranscription}
-          </Text>
+          <Text style={styles.name}>{sura.name.bosnianTranscription}</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.class}>{'MEDINAN'}</Text>
             <Text style={styles.bullet}>•</Text>
             <Text style={styles.versesNumber}>
-              {props.sura.numberOfAyas + ' VERSES'}
+              {sura.numberOfAyas + ' VERSES'}
             </Text>
           </View>
         </View>
-        <Text style={styles.nameAr}>{props.sura.name.arabic}</Text>
+        <Text style={styles.nameAr}>{sura.name.arabic}</Text>
       </TouchableOpacity>
     </>
   );

@@ -23,7 +23,6 @@ import {settingsActions} from '../redux/slices/settingsSlice';
 import {quranActions} from '../redux/slices/quranSlice';
 
 const QuranPageHeader = () => {
-  console.log('QuranPageHeader');
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {pageInfo, showHeader} = useSelector((state: State) => state.header);

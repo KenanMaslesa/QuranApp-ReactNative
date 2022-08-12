@@ -27,7 +27,7 @@ const removeData = async (storageKey: string) => {
   console.log(`${storageKey} removed`);
 };
 
-export const AsyncStorageService = {
+export const asyncStorageService = {
   storeData,
   getData,
   removeData,

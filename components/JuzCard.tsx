@@ -4,18 +4,21 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Juz} from '../shared/models';
 import {SCREENS} from '../screens/constants';
 
-const JuzCard: React.FC<{juz: Juz}> = props => {
+interface JuzCardProps {
+  juz: Juz;
+}
+const JuzCard = ({juz}: JuzCardProps) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={styles.suraContainer}
       onPress={() => {
         navigation.navigate(SCREENS.QURAN_SCREEN, {
-          startPage: props.juz.startPage,
+          startPage: juz.startPage,
         });
       }}>
       <View style={styles.suraCard}>
-        <Text style={styles.suraText}>{props.juz.id}. Džuz</Text>
+        <Text style={styles.suraText}>{juz.id}. Džuz</Text>
       </View>
     </TouchableOpacity>
   );

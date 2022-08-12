@@ -17,7 +17,7 @@ const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {isPlaying, playAudio} from '../utils/playAudio';
 import {headerActions} from '../redux/slices/headerSlice';
-import {QuranService} from '../services/QuranService';
+import {quranService} from '../services/quranService';
 import {Ayah, PageInfo, QuranData, Word} from '../shared/models';
 import {State} from '../redux/store';
 
@@ -61,7 +61,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
   }, [page]);
 
   const getPageInfo = useCallback(() => {
-    setPageInfo(QuranService.getPageInfo(page));
+    setPageInfo(quranService.getPageInfo(page));
   }, [page]);
 
   const toggleHeader = () => {
@@ -122,7 +122,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
               <View style={styles.surahTitleWrapper}>
                 <Image
                   style={styles.surahTitleImage}
-                  source={require('../assets/surah_title.gif')}
+                  source={require('../assets/images/surah_title.gif')}
                 />
                 <Text style={styles.surahTitleText(isDarkTheme)}>
                   {ayah.metaData?.suraName}

@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getBookmarks} from '../redux/actions/bookmarksActions';
 import {bookmarkActions} from '../redux/slices/bookmarksSlice';
 import {State} from '../redux/store';
-import {AsyncStorageService} from '../services/AsyncStorageService';
+import {asyncStorageService} from '../services/asyncStorageService';
 import {ASYNC_STORAGE_KEYS} from '../shared/AsyncStorageKeys';
 import {Bookmark} from '../shared/models';
 import {SCREENS} from './constants';
@@ -14,7 +14,7 @@ const BookmarkScreen = ({navigation}: any) => {
   const bookmarks = useSelector((state: State) => state.bookmark.bookmarks);
 
   const removeAllBookmarsk = () => {
-    AsyncStorageService.removeData(ASYNC_STORAGE_KEYS.BOOKMARKS);
+    asyncStorageService.removeData(ASYNC_STORAGE_KEYS.BOOKMARKS);
     dispatch(bookmarkActions.removeAllBookmarks());
   };
 
