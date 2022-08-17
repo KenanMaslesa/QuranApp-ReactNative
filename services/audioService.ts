@@ -1,61 +1,44 @@
-import {Alert} from 'react-native';
-import Sound from 'react-native-sound'; //https://www.npmjs.com/package/react-native-sound
+import TrackPlayer, {Capability} from 'react-native-track-player';
 
-let audio: Sound = new Sound('');
-
-const playAudio = (audioUrl: string) => {
-  if (audio) {
-    audio.stop();
-  }
-
-  audio = new Sound(audioUrl, '', (error: any) => {
-    if (error) {
-      Alert.alert('error: ' + error.message);
-      return;
-    }
-    audio.play(() => {
-      audio.release();
+async function setupPlayer() {
+  try {
+    await TrackPlayer.setupPlayer();
+    await TrackPlayer.updateOptions({
+      // Media controls capabilities
+      capabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.SeekTo,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+        Capability.Stop,
+        Capability.Skip,
+      ],
+      // Capabilities that will show up when the notification is in the compact form on Android
+      compactCapabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.SeekTo,
+        Capability.Skip,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+        Capability.Stop,
+      ],
     });
-  });
-};
+  } catch (error) {}
+}
 
-const stopAudio = () => {
-  audio.stop();
-};
-
-const pauseAudio = () => {
-  audio.pause();
-};
-
-const togglePlayAudio = () => {
-  if (audio.isPlaying()) {
-    audio.pause();
-  } else {
-    audio.play();
-  }
-};
-
-const getCurrentTime = () => {
-  const timeInSeconds = audio.getCurrentTime((seconds: number) => {
-    return seconds;
-  });
-  return timeInSeconds;
-};
-
-const isAudioPlaying = (): boolean => {
-  return audio.isPlaying();
-};
-
-const setCurrentTime = (seconds: number) => {
-  audio.setCurrentTime(seconds);
-};
+async function playAudio(audioUrl: string) {
+  try {
+    // TrackPlayer.reset();
+    await TrackPlayer.add({
+      url: audioUrl,
+    });
+    await TrackPlayer.play();
+  } catch (error) {}
+}
 
 export const audioService = {
+  setupPlayer,
   playAudio,
-  stopAudio,
-  pauseAudio,
-  togglePlayAudio,
-  getCurrentTime,
-  isAudioPlaying,
-  setCurrentTime,
 };

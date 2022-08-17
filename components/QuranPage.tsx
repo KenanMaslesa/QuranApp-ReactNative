@@ -21,6 +21,8 @@ import {Ayah, PageInfo, QuranData, Word} from '../shared/models';
 import {State} from '../redux/store';
 import {quranActions} from '../redux/slices/quranSlice';
 import {quranService} from '../services/quranService';
+import TrackPlayer, {Capability, Track} from 'react-native-track-player';
+import {audioService} from '../services/audioService';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -56,6 +58,7 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
   useEffect(() => {
     getQuranWordsforPage();
     getPageInfo();
+    audioService.setupPlayer();
   }, []);
 
   const getQuranWordsforPage = useCallback(() => {
@@ -86,7 +89,7 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
     }
     const audioUrl = `https://audio.qurancdn.com/${word.audio}`;
     setPlayingWord(word.audio);
-    playAudio(audioUrl, true);
+    playAudio(audioUrl);
   };
 
   const playAyah = (ayahIndex: number | undefined) => {
@@ -101,7 +104,7 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
     const ayaNumber = data.ayaNumber;
     const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
     const audioUrl = `https://www.everyayah.com/data/${selectedQari}/${sura_ayah}.mp3`;
-    playAudio(audioUrl, false);
+    playAudio(audioUrl);
     dispatch(quranActions.setPlayingAyahIndex(ayahIndex));
   };
 
@@ -110,20 +113,9 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
     setPlayingWord('null');
   };
 
-  const playAudio = (audioUrl: string, isPlayingWord: boolean) => {
+  const playAudio = (audioUrl: string) => {
     try {
-      SoundPlayer.playUrl(audioUrl);
-      const subscriptionSoundPlayer = SoundPlayer.addEventListener(
-        'FinishedPlaying',
-        () => {
-          if (!isPlayingWord) {
-            resetPlayingAyahAndWord();
-            let temp = playingAyahIndexTemp + 1;
-            playAyah(temp);
-            subscriptionSoundPlayer.remove();
-          }
-        },
-      );
+      audioService.playAudio(audioUrl);
     } catch (e) {
       console.log('cannot play', e);
     }
