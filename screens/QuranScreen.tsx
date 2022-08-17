@@ -4,6 +4,7 @@ import {StyleSheet, FlatList, View, ScrollView, Dimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import QuranPage from '../components/QuranPage';
+import QuranPlayer from '../components/QuranPlayer';
 import QuranTranslationBottomSheet from '../components/QuranTranslationBottomSheet';
 import {headerActions} from '../redux/slices/headerSlice';
 import {quranActions} from '../redux/slices/quranSlice';
@@ -27,6 +28,7 @@ const QuranScreen = ({route}: any) => {
   const showTranslation = useSelector(
     (state: State) => state.quran.showTranslation,
   );
+  const showHeader = useSelector((state: State) => state.header.showHeader);
 
   const pages = createArray(1, 604);
   const flatListRef = useRef<FlatList>(null);
@@ -39,17 +41,21 @@ const QuranScreen = ({route}: any) => {
     }, 3000);
   }, []);
 
-  // const scrollTo = (pageNumber: number) => {
-  //   flatListRef.current?.scrollToIndex({
-  //     index: pageNumber - 1,
-  //     animated: true,
-  //   });
-  // };
+  const scrollTo = (pageNumber: number) => {
+    flatListRef.current?.scrollToIndex({
+      index: pageNumber - 1,
+      animated: true,
+    });
+  };
 
   const renderItem = ({item}: any) => (
     <ScrollView>
       <View style={styles.page(isDarkTheme)}>
-        <QuranPage page={item} isDarkTheme={isDarkTheme} />
+        <QuranPage
+          page={item}
+          isDarkTheme={isDarkTheme}
+          scrollToPage={scrollTo}
+        />
       </View>
     </ScrollView>
   );
@@ -104,6 +110,7 @@ const QuranScreen = ({route}: any) => {
       {showTranslation && (
         <QuranTranslationBottomSheet pageNumber={currentPage} />
       )}
+      {showHeader && <QuranPlayer />}
     </View>
   );
 };

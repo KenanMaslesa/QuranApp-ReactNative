@@ -11,15 +11,16 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import SoundPlayer from 'react-native-sound-player'; //https://www.npmjs.com/package/react-native-sound-player
 
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
 import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
-import {isPlaying, playAudio} from '../utils/playAudio';
 import {headerActions} from '../redux/slices/headerSlice';
-import {quranService} from '../services/quranService';
 import {Ayah, PageInfo, QuranData, Word} from '../shared/models';
 import {State} from '../redux/store';
+import {quranActions} from '../redux/slices/quranSlice';
+import {quranService} from '../services/quranService';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -34,17 +35,23 @@ enum AudioCharType {
 interface QuranPageProps {
   page: number;
   isDarkTheme: boolean;
+  scrollToPage: (pageNumber: number) => void;
 }
 
-const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
+let playingAyahIndexTemp: number | undefined = -1;
+const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
   const dispatch = useDispatch();
 
   const [quranWords, setQuranWords] = useState<QuranData>();
   const [pageInfo, setPageInfo] = useState<PageInfo>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [playingAyah, setPlayingAyah] = useState<string | null>();
   const [playingWord, setPlayingWord] = useState<string | null>();
   const quranFontSize = useSelector((state: State) => state.quran.fontSize);
+  const selectedQari = useSelector((state: State) => state.quran.selectedQari);
+  const currentPage = useSelector((state: State) => state.quran.currentPage);
+  const playingAyahIndex = useSelector(
+    (state: State) => state.quran.playingAyahIndex,
+  );
 
   useEffect(() => {
     getQuranWordsforPage();
@@ -68,28 +75,58 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
     dispatch(headerActions.toggleHeader());
   };
 
-  const playAyahOrWord = async (ayah: Word | null) => {
-    let audioUrl = '';
-    if (ayah?.charType === AudioCharType.WORD) {
-      audioUrl = `https://audio.qurancdn.com/${ayah.audio}`;
-      setPlayingWord(ayah.audio);
+  const playWord = (word: Word | null) => {
+    resetPlayingAyahAndWord();
+    if (!word) {
+      return;
     }
-    if (ayah?.charType === AudioCharType.END_ICON) {
-      const sura_ayah = formatNumberForAudioUrl(
-        ayah.ayahKey ? ayah.ayahKey : '',
-      );
-      audioUrl = `https://www.everyayah.com/data/Alafasy_128kbps/${sura_ayah}.mp3`;
-      setPlayingAyah(ayah.ayahKey);
+    if (word.charType === AudioCharType.END_ICON) {
+      playAyah(word.ayahIndex);
+      return;
     }
-    playAudio(audioUrl);
+    const audioUrl = `https://audio.qurancdn.com/${word.audio}`;
+    setPlayingWord(word.audio);
+    playAudio(audioUrl, true);
+  };
 
-    const interval = setInterval(() => {
-      if (!isPlaying()) {
-        clearInterval(interval);
-        setPlayingAyah(null);
-        setPlayingWord('-');
-      }
-    }, 2000);
+  const playAyah = (ayahIndex: number | undefined) => {
+    playingAyahIndexTemp = ayahIndex;
+    console.log(playingAyahIndexTemp);
+    resetPlayingAyahAndWord();
+    const data = quranService.getAyatDetailsByAyahIndex(ayahIndex);
+    if (data.page && data.page !== currentPage) {
+      scrollToPage(data.page);
+    }
+    const suraOfAyah = data.sura;
+    const ayaNumber = data.ayaNumber;
+    const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
+    const audioUrl = `https://www.everyayah.com/data/${selectedQari}/${sura_ayah}.mp3`;
+    playAudio(audioUrl, false);
+    dispatch(quranActions.setPlayingAyahIndex(ayahIndex));
+  };
+
+  const resetPlayingAyahAndWord = () => {
+    // dispatch(quranActions.setPlayingAyahIndex(0));
+    setPlayingWord('null');
+  };
+
+  const playAudio = (audioUrl: string, isPlayingWord: boolean) => {
+    try {
+      SoundPlayer.playUrl(audioUrl);
+      const subscriptionSoundPlayer = SoundPlayer.addEventListener(
+        'FinishedPlaying',
+        () => {
+          if (!isPlayingWord) {
+            resetPlayingAyahAndWord();
+            let temp = playingAyahIndexTemp + 1;
+            playAyah(temp);
+            subscriptionSoundPlayer.remove();
+          }
+        },
+      );
+    } catch (e) {
+      console.log('cannot play', e);
+    }
   };
 
   if (loading) {
@@ -144,7 +181,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
                     fontSize: quranFontSize,
                     fontFamily: `p${page}`,
                     color:
-                      playingAyah === word?.ayahKey ||
+                      playingAyahIndex === word?.ayahIndex ||
                       playingWord === word?.audio
                         ? 'blue'
                         : isDarkTheme
@@ -152,15 +189,8 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
                         : 'black',
                   }}
                   key={word?.codeV1}
-                  onPress={() => playAyahOrWord(word)}
-                  onLongPress={() =>
-                    playAyahOrWord({
-                      audio: word?.audio,
-                      charType: 'end',
-                      ayahKey: word?.ayahKey,
-                      codeV1: '',
-                    })
-                  }>
+                  onPress={() => playWord(word)}
+                  onLongPress={() => playAyah(word?.ayahIndex)}>
                   {word?.codeV1}
                 </Text>
               ))}

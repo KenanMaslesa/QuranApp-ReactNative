@@ -70,6 +70,7 @@ export interface Word {
   charType: string;
   codeV1: string;
   ayahKey?: string;
+  ayahIndex?: number;
 }
 
 export interface MetaData {

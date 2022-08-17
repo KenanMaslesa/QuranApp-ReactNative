@@ -18,11 +18,14 @@ const SuraCard = ({sura}: SuraCardProps) => {
 
   const viewSura = () => {
     dispatch(quranActions.setLoading(true));
-    setTimeout(() => {
-      navigation.navigate(SCREENS.QURAN_SCREEN, {
-        startPage: sura.startPage,
-      });
-    }, 1);
+    navigation.navigate(SCREENS.QURAN_SCREEN, {
+      startPage: sura.startPage,
+    });
+    // setTimeout(() => {
+    //   navigation.navigate(SCREENS.QURAN_SCREEN, {
+    //     startPage: sura.startPage,
+    //   });
+    // }, 1);
   };
 
   return (

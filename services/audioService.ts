@@ -1,9 +1,9 @@
 import {Alert} from 'react-native';
 import Sound from 'react-native-sound'; //https://www.npmjs.com/package/react-native-sound
 
-let audio: Sound;
+let audio: Sound = new Sound('');
 
-export const playAudio = (audioUrl: string) => {
+const playAudio = (audioUrl: string) => {
   if (audio) {
     audio.stop();
   }
@@ -19,15 +19,15 @@ export const playAudio = (audioUrl: string) => {
   });
 };
 
-export const stopAudio = () => {
+const stopAudio = () => {
   audio.stop();
 };
 
-export const pauseAudio = () => {
+const pauseAudio = () => {
   audio.pause();
 };
 
-export const togglePlayAudio = () => {
+const togglePlayAudio = () => {
   if (audio.isPlaying()) {
     audio.pause();
   } else {
@@ -35,19 +35,27 @@ export const togglePlayAudio = () => {
   }
 };
 
-export const getCurrentTime = () => {
+const getCurrentTime = () => {
   const timeInSeconds = audio.getCurrentTime((seconds: number) => {
     return seconds;
   });
   return timeInSeconds;
 };
 
-export const isPlaying = (): boolean => {
+const isAudioPlaying = (): boolean => {
   return audio.isPlaying();
 };
 
-export const setCurrentTime = (seconds: number) => {
+const setCurrentTime = (seconds: number) => {
   audio.setCurrentTime(seconds);
 };
 
-pauseAudio;
+export const audioService = {
+  playAudio,
+  stopAudio,
+  pauseAudio,
+  togglePlayAudio,
+  getCurrentTime,
+  isAudioPlaying,
+  setCurrentTime,
+};
