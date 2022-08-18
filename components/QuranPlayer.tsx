@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,10 @@ import {State} from '../redux/store';
 import useQuranPlayer from '../hooks/useQuranPlayer';
 import {quranPlayerActions} from '../redux/slices/quranPlayerSlice';
 import {Qari} from '../shared/models';
+import {
+  getSelectedQari,
+  setSelectedQari,
+} from '../redux/actions/quranPlayerActions';
 
 const PLAYER_ICONS_SIZE = 25;
 interface SelectDropdownItem {
@@ -25,6 +29,10 @@ const QuranPlayer = () => {
     (state: State) => state.quranPlayer,
   );
   const [playAyahAudio, resetPlayingAyahAndWord] = useQuranPlayer();
+
+  useEffect(() => {
+    dispatch(getSelectedQari());
+  }, []);
 
   const stopPlaying = () => {
     SoundPlayer.stop();
@@ -63,7 +71,7 @@ const QuranPlayer = () => {
             data={qariList}
             onSelect={(selectedItem: Qari, index) => {
               console.log(selectedItem, index);
-              dispatch(quranPlayerActions.setSelectedQari(selectedItem));
+              dispatch(setSelectedQari(selectedItem));
             }}
             defaultButtonText={'Search...'}
             defaultValueByIndex={qariList.findIndex(

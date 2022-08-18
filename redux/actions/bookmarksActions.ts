@@ -6,13 +6,13 @@ import {bookmarkActions} from '../slices/bookmarksSlice';
 
 export const getBookmarks = (): any => {
   return async (dispatch: Dispatch<DispatchType<Bookmark[]>>) => {
-    asyncStorageService.getData(ASYNC_STORAGE_KEYS.BOOKMARKS).then(
-      (bookmarks: Bookmark[]) => {
+    asyncStorageService
+      .getData(ASYNC_STORAGE_KEYS.BOOKMARKS)
+      .then((bookmarks: Bookmark[]) => {
         if (bookmarks) {
           dispatch(bookmarkActions.setBookmarks(bookmarks));
         }
-      },
-    );
+      });
   };
 };
 

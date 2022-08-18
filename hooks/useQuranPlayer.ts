@@ -27,15 +27,14 @@ const useQuranPlayer = () => {
 
   const playAyahAudio = async (ayahIndex: number | undefined) => {
     playingAyahIndexTemp = ayahIndex;
-    console.log(playingAyahIndexTemp);
-    resetPlayingAyahAndWord();
     dispatch(quranPlayerActions.setPlayingAyahIndex(ayahIndex));
-    const data = quranService.getAyatDetailsByAyahIndex(ayahIndex);
-    if (data.page && data.page !== currentPage) {
-      dispatch(quranActions.setScrollToPage(data.page));
+
+    const ayahDetails = quranService.getAyatDetailsByAyahIndex(ayahIndex);
+    if (ayahDetails.page && ayahDetails.page !== currentPage) {
+      dispatch(quranActions.setScrollToPage(ayahDetails.page));
     }
-    const suraOfAyah = data.sura;
-    const ayaNumber = data.ayaNumber;
+    const suraOfAyah = ayahDetails.sura;
+    const ayaNumber = ayahDetails.ayaNumber;
     const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
     const audioUrl = `https://www.everyayah.com/data/${selectedQari.value}/${sura_ayah}.mp3`;
 
@@ -50,8 +49,6 @@ const useQuranPlayer = () => {
       await SoundPlayer.playUrl(ayahUrl);
       dispatch(quranPlayerActions.setIsStoped(false));
       dispatch(quranPlayerActions.setIsPlaying(true));
-      const info = await SoundPlayer.getInfo();
-      console.log('getInfo', info);
       isFinishedPlaying = false;
       subscriptionSoundPlayer = SoundPlayer.addEventListener(
         'FinishedPlaying',
@@ -64,8 +61,8 @@ const useQuranPlayer = () => {
           playAyahAudio(temp);
         },
       );
-    } catch (e) {
-      console.log('cannot play', e);
+    } catch (error) {
+      console.log('cannot play', error);
     }
   };
 
@@ -94,8 +91,8 @@ const useQuranPlayer = () => {
       SoundPlayer.addEventListener('FinishedPlaying', () => {
         resetPlayingAyahAndWord();
       });
-    } catch (e) {
-      console.log('cannot play', e);
+    } catch (error) {
+      console.log('cannot play', error);
     }
   };
 
