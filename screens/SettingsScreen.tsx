@@ -80,7 +80,7 @@ const SettingsScreen = () => {
           show notification
         </Text>
         <Text style={styles.button} onPress={() => scheduleLocalNotification()}>
-          schedule notification every hour
+          schedule morning and evening dhikr notification (08:50 - 17:00)
         </Text>
         <Text
           style={styles.button}
