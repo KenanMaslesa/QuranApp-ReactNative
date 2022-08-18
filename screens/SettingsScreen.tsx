@@ -33,10 +33,19 @@ const SettingsScreen = () => {
       CHANNELS.Quran.channelId,
       'Večernji zikr 🌙',
       'Vrijeme je za večernji zikr',
-      NotificationRepeatType.HOUR,
+      NotificationRepeatType.DAY,
       1, // 2 - every two seconds/minutes/hours/days
-      new Date().getHours(),
-      new Date().getMinutes() + 5,
+      17,
+      0,
+    );
+    NotificationService.scheduleLocalNotification(
+      CHANNELS.Quran.channelId,
+      'Jutarnji zikr 🌞',
+      'Vrijeme je za jutarnji zikr',
+      NotificationRepeatType.DAY,
+      1, // 2 - every two seconds/minutes/hours/days
+      8,
+      50,
     );
   };
 
