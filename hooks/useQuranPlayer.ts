@@ -26,6 +26,7 @@ const useQuranPlayer = () => {
   const {currentPage} = useSelector((state: State) => state.quran);
 
   const playAyahAudio = async (ayahIndex: number | undefined) => {
+    resetPlayingAyahAndWord();
     playingAyahIndexTemp = ayahIndex;
     dispatch(quranPlayerActions.setPlayingAyahIndex(ayahIndex));
 
@@ -42,14 +43,15 @@ const useQuranPlayer = () => {
   };
 
   const playAyah = async (ayahUrl: string) => {
+    dispatch(quranPlayerActions.setIsStoped(false));
+    dispatch(quranPlayerActions.setIsPlaying(true));
+    isFinishedPlaying = false;
+
     try {
       if (subscriptionSoundPlayer && !isFinishedPlaying) {
         subscriptionSoundPlayer.remove();
       }
       await SoundPlayer.playUrl(ayahUrl);
-      dispatch(quranPlayerActions.setIsStoped(false));
-      dispatch(quranPlayerActions.setIsPlaying(true));
-      isFinishedPlaying = false;
       subscriptionSoundPlayer = SoundPlayer.addEventListener(
         'FinishedPlaying',
         () => {
