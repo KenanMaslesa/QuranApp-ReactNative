@@ -11,54 +11,38 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import SoundPlayer from 'react-native-sound-player'; //https://www.npmjs.com/package/react-native-sound-player
 
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
-import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 import {headerActions} from '../redux/slices/headerSlice';
-import {Ayah, PageInfo, QuranData, Word} from '../shared/models';
+import {Ayah, PageInfo, QuranData} from '../shared/models';
 import {State} from '../redux/store';
-import {quranActions} from '../redux/slices/quranSlice';
 import {quranService} from '../services/quranService';
-import TrackPlayer, {Capability, Track} from 'react-native-track-player';
-import {audioService} from '../services/audioService';
+import useQuranPlayer from '../hooks/useQuranPlayer';
 
 enum LineType {
   BISMILLAH = 'besmellah',
   START_SURA = 'start_sura',
 }
-
-enum AudioCharType {
-  WORD = 'word',
-  END_ICON = 'end',
-}
-
 interface QuranPageProps {
   page: number;
   isDarkTheme: boolean;
-  scrollToPage: (pageNumber: number) => void;
 }
 
-let playingAyahIndexTemp: number | undefined = -1;
-const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
+const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
   const dispatch = useDispatch();
 
   const [quranWords, setQuranWords] = useState<QuranData>();
   const [pageInfo, setPageInfo] = useState<PageInfo>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [playingWord, setPlayingWord] = useState<string | null>();
   const quranFontSize = useSelector((state: State) => state.quran.fontSize);
-  const selectedQari = useSelector((state: State) => state.quran.selectedQari);
-  const currentPage = useSelector((state: State) => state.quran.currentPage);
-  const playingAyahIndex = useSelector(
-    (state: State) => state.quran.playingAyahIndex,
-  );
+  const {playingAyahIndex} = useSelector((state: State) => state.quranPlayer);
+
+  const [playAyahAudio, playWord, playingWord] = useQuranPlayer();
 
   useEffect(() => {
     getQuranWordsforPage();
     getPageInfo();
-    audioService.setupPlayer();
   }, []);
 
   const getQuranWordsforPage = useCallback(() => {
@@ -76,49 +60,6 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
 
   const toggleHeader = () => {
     dispatch(headerActions.toggleHeader());
-  };
-
-  const playWord = (word: Word | null) => {
-    resetPlayingAyahAndWord();
-    if (!word) {
-      return;
-    }
-    if (word.charType === AudioCharType.END_ICON) {
-      playAyah(word.ayahIndex);
-      return;
-    }
-    const audioUrl = `https://audio.qurancdn.com/${word.audio}`;
-    setPlayingWord(word.audio);
-    playAudio(audioUrl);
-  };
-
-  const playAyah = (ayahIndex: number | undefined) => {
-    playingAyahIndexTemp = ayahIndex;
-    console.log(playingAyahIndexTemp);
-    resetPlayingAyahAndWord();
-    const data = quranService.getAyatDetailsByAyahIndex(ayahIndex);
-    if (data.page && data.page !== currentPage) {
-      scrollToPage(data.page);
-    }
-    const suraOfAyah = data.sura;
-    const ayaNumber = data.ayaNumber;
-    const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
-    const audioUrl = `https://www.everyayah.com/data/${selectedQari}/${sura_ayah}.mp3`;
-    playAudio(audioUrl);
-    dispatch(quranActions.setPlayingAyahIndex(ayahIndex));
-  };
-
-  const resetPlayingAyahAndWord = () => {
-    // dispatch(quranActions.setPlayingAyahIndex(0));
-    setPlayingWord('null');
-  };
-
-  const playAudio = (audioUrl: string) => {
-    try {
-      audioService.playAudio(audioUrl);
-    } catch (e) {
-      console.log('cannot play', e);
-    }
   };
 
   if (loading) {
@@ -182,7 +123,7 @@ const QuranPage = ({page, isDarkTheme, scrollToPage}: QuranPageProps) => {
                   }}
                   key={word?.codeV1}
                   onPress={() => playWord(word)}
-                  onLongPress={() => playAyah(word?.ayahIndex)}>
+                  onLongPress={() => playAyahAudio(word?.ayahIndex)}>
                   {word?.codeV1}
                 </Text>
               ))}

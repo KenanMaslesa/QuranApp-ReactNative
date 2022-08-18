@@ -89,3 +89,8 @@ export interface Bookmark {
   pageNumber: number;
   date: string;
 }
+
+export interface Qari {
+  value: string;
+  name: string;
+}

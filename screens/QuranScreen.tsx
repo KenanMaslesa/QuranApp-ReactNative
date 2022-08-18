@@ -24,22 +24,26 @@ interface FlatListViewableItem {
 const QuranScreen = ({route}: any) => {
   const dispatch = useDispatch();
   const isDarkTheme = useSelector((state: State) => state.settings.isDarkTheme);
-  const currentPage = useSelector((state: State) => state.quran.currentPage);
-  const showTranslation = useSelector(
-    (state: State) => state.quran.showTranslation,
+  const {currentPage, showTranslation, scrollToPage} = useSelector(
+    (state: State) => state.quran,
   );
-  const showHeader = useSelector((state: State) => state.header.showHeader);
+  const {showHeader} = useSelector((state: State) => state.header);
 
   const pages = createArray(1, 604);
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    dispatch(quranActions.setLoading(false));
     dispatch(headerActions.setShowHeader(true));
     setTimeout(() => {
       dispatch(headerActions.setShowHeader(false));
     }, 3000);
   }, []);
+
+  useEffect(() => {
+    if (scrollToPage >= 0) {
+      scrollTo(scrollToPage);
+    }
+  }, [scrollToPage]);
 
   const scrollTo = (pageNumber: number) => {
     flatListRef.current?.scrollToIndex({
@@ -51,11 +55,7 @@ const QuranScreen = ({route}: any) => {
   const renderItem = ({item}: any) => (
     <ScrollView>
       <View style={styles.page(isDarkTheme)}>
-        <QuranPage
-          page={item}
-          isDarkTheme={isDarkTheme}
-          scrollToPage={scrollTo}
-        />
+        <QuranPage page={item} isDarkTheme={isDarkTheme} />
       </View>
     </ScrollView>
   );
