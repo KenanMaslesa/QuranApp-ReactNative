@@ -1,18 +1,24 @@
 import React from 'react';
 
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
+import SelectDropdownWithSearch from 'react-native-select-dropdown-with-search';
+const {width, height} = Dimensions.get('screen');
 
 import {qariList} from '../data/data';
 import SoundPlayer from 'react-native-sound-player';
 import {State} from '../redux/store';
 import useQuranPlayer from '../hooks/useQuranPlayer';
 import {quranPlayerActions} from '../redux/slices/quranPlayerSlice';
+import {Qari} from '../shared/models';
 
-const PLAYER_ICONS_SIZE = 22;
-
+const PLAYER_ICONS_SIZE = 25;
+interface SelectDropdownItem {
+  name: string;
+  value: string;
+}
 const QuranPlayer = () => {
   const dispatch = useDispatch();
   const {isPlaying, isStoped, selectedQari, playingAyahIndex} = useSelector(
@@ -53,23 +59,29 @@ const QuranPlayer = () => {
     <View style={styles.playerContainer}>
       {isStoped ? (
         <View>
-          <SelectDropdown
-            data={qariList.map(qari => qari.identifier)}
-            defaultValue={selectedQari}
-            onSelect={(selectedItem, index) => {
+          <SelectDropdownWithSearch
+            data={qariList}
+            onSelect={(selectedItem: Qari, index) => {
               console.log(selectedItem, index);
               dispatch(quranPlayerActions.setSelectedQari(selectedItem));
             }}
-            buttonTextAfterSelection={(selectedItem, index) => {
+            defaultButtonText={'Search...'}
+            defaultValueByIndex={qariList.findIndex(
+              (qari: Qari) => qari.value === selectedQari.value,
+            )}
+            buttonTextAfterSelection={(selectedItem: SelectDropdownItem) => {
               // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
+              return selectedItem.name;
             }}
-            rowTextForSelection={(item, index) => {
+            rowTextForSelection={(item: SelectDropdownItem, index) => {
               // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
+              return `${index + 1}. ${item.name}`;
             }}
+            buttonStyle={styles.dropdownButtonStyle}
+            dropdownStyle={styles.dropdownStyle}
+            rowStyle={styles.dropdownRowStyle}
+            rowTextStyle={styles.dropdownTextStyle}
+            dropdownOverlayColor={'#0008'}
           />
         </View>
       ) : (
@@ -137,7 +149,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   playerIcon: {
-    marginLeft: 10,
-    marginRight: 10,
+    padding: 10,
+    marginLeft: 2,
+    marginRight: 2,
+    height: '100%',
+  },
+  dropdownStyle: {
+    backgroundColor: 'lightgray',
+    width: width - 120,
+    height: height - 200,
+  },
+  dropdownButtonStyle: {
+    backgroundColor: 'transparent',
+  },
+  dropdownRowStyle: {
+    backgroundColor: 'white',
+    height: 65,
+  },
+  dropdownTextStyle: {
+    fontWeight: '400',
+    textAlign: 'left',
   },
 });

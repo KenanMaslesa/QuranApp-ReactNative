@@ -1,16 +1,13 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {qariList} from '../../data/data';
+import {Qari} from '../../shared/models';
 
-interface Qari {
-  identifier: string;
-  englishName: string;
-}
 export interface QuranPlayerSlice {
   playingAyahIndex?: number;
   isPlaying: boolean;
   isStoped: boolean;
   qariList: Qari[];
-  selectedQari: string;
+  selectedQari: Qari;
 }
 
 const initialState: QuranPlayerSlice = {
@@ -18,7 +15,10 @@ const initialState: QuranPlayerSlice = {
   isPlaying: false,
   isStoped: true,
   qariList: qariList,
-  selectedQari: 'Alafasy_128kbps',
+  selectedQari: {
+    value: 'Alafasy_128kbps',
+    name: 'Mishary Alafasy',
+  },
 };
 
 const quranPlayerSlice = createSlice({
@@ -31,7 +31,7 @@ const quranPlayerSlice = createSlice({
     ) => {
       state.playingAyahIndex = payload;
     },
-    setSelectedQari: (state, {payload}: PayloadAction<string>) => {
+    setSelectedQari: (state, {payload}: PayloadAction<Qari>) => {
       state.selectedQari = payload;
     },
     setIsPlaying: (state, {payload}: PayloadAction<boolean>) => {

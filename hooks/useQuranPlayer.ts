@@ -37,7 +37,7 @@ const useQuranPlayer = () => {
     const suraOfAyah = data.sura;
     const ayaNumber = data.ayaNumber;
     const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
-    const audioUrl = `https://www.everyayah.com/data/${selectedQari}/${sura_ayah}.mp3`;
+    const audioUrl = `https://www.everyayah.com/data/${selectedQari.value}/${sura_ayah}.mp3`;
 
     playAyah(audioUrl);
   };
