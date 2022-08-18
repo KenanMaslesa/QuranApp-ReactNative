@@ -1,8 +1,8 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Juz} from '../shared/models';
-import {SCREENS} from '../screens/constants';
+import {Juz} from '../../../shared/models';
+import {SCREENS} from '../../constants';
 
 interface JuzCardProps {
   juz: Juz;

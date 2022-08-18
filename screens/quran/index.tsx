@@ -3,15 +3,15 @@ import {useRef} from 'react';
 import {StyleSheet, FlatList, View, ScrollView, Dimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import QuranPage from '../components/QuranPage';
-import QuranPlayer from '../components/QuranPlayer';
-import QuranTranslationBottomSheet from '../components/QuranTranslationBottomSheet';
-import {headerActions} from '../redux/slices/headerSlice';
-import {quranActions} from '../redux/slices/quranSlice';
-import {State} from '../redux/store';
-import {quranService} from '../services/quranService';
-import {PageInfo} from '../shared/models';
-import {createArray} from '../utils/createArray';
+import QuranPage from './components/QuranPage';
+import QuranPlayer from './components/QuranPlayer';
+import QuranTranslationBottomSheet from './components/QuranTranslationBottomSheet';
+import {headerActions} from '../../redux/slices/headerSlice';
+import {quranActions} from '../../redux/slices/quranSlice';
+import {State} from '../../redux/store';
+import {quranService} from '../../services/quranService';
+import {PageInfo} from '../../shared/models';
+import {createArray} from '../../utils/createArray';
 
 interface FlatListViewableItem {
   index: number;

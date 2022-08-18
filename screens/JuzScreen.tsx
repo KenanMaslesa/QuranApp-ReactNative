@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import JuzList from '../components/JuzList';
+import JuzList from './home/components/JuzList';
 
 const JuzScreen = () => {
   return (

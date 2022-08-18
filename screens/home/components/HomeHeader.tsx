@@ -8,9 +8,9 @@ import Popover, {
 } from 'react-native-popover-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
-import {State} from '../redux/store';
-import {SCREENS} from '../screens/constants';
-import {randomNumberInRange} from '../utils/randomNumberInRange';
+import {State} from '../../../redux/store';
+import {SCREENS} from '../../constants';
+import {randomNumberInRange} from '../../../utils/randomNumberInRange';
 
 const HomeHeader = () => {
   const navigation = useNavigation();

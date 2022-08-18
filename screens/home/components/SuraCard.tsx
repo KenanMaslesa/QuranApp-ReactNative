@@ -2,12 +2,12 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SCREENS} from '../screens/constants';
-import {Sura} from '../shared/models';
+import {SCREENS} from '../../constants';
+import {Sura} from '../../../shared/models';
 import {useDispatch} from 'react-redux';
 
-import {quranActions} from '../redux/slices/quranSlice';
-import chapterBg from '../assets/images/chapter-number-blue.png';
+import {quranActions} from '../../../redux/slices/quranSlice';
+import {chapterNumberImage} from '../../../assets/images';
 
 interface SuraCardProps {
   sura: Sura;
@@ -32,7 +32,7 @@ const SuraCard = ({sura}: SuraCardProps) => {
     <>
       <TouchableOpacity style={styles.listItem} onPress={viewSura}>
         <ImageBackground
-          source={chapterBg}
+          source={chapterNumberImage}
           resizeMode="cover"
           style={styles.chapterNumber}>
           <Text style={styles.chapterNumberText}>{sura.index}</Text>

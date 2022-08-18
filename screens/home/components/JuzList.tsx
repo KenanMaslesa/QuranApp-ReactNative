@@ -2,10 +2,10 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 
-import Loader from './Loader';
+import Loader from '../../../shared/components/Loader';
 import JuzCard from './JuzCard';
-import {Juz} from '../shared/models';
-import {quranService} from '../services/quranService';
+import {Juz} from '../../../shared/models';
+import {quranService} from '../../../services/quranService';
 
 const JuzList = () => {
   const [juzList, setJuzList] = useState<Juz[]>();

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import SuraList from '../components/SuraList';
+import SuraList from './components/SuraList';
 
 const SuraScreen = () => {
   return (

@@ -10,17 +10,17 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons'; //https://ionic.io/ionicons
-import {setBookmarks} from '../redux/actions/bookmarksActions';
+import {setBookmarks} from '../../../redux/actions/bookmarksActions';
 import Popover, {
   PopoverMode,
   PopoverPlacement,
 } from 'react-native-popover-view';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-import {State} from '../redux/store';
-import {Bookmark, SuraName} from '../shared/models';
-import {settingsActions} from '../redux/slices/settingsSlice';
-import {quranActions} from '../redux/slices/quranSlice';
+import {State} from '../../../redux/store';
+import {Bookmark, SuraName} from '../../../shared/models';
+import {settingsActions} from '../../../redux/slices/settingsSlice';
+import {quranActions} from '../../../redux/slices/quranSlice';
 
 const QuranPageHeader = () => {
   const dispatch = useDispatch();

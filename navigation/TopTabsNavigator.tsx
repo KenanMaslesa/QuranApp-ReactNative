@@ -1,9 +1,9 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import SuraScreen from '../screens/SuraScreen';
+import SuraScreen from '../screens/home';
 import JuzScreen from '../screens/JuzScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
-import HomeHeader from '../components/HomeHeader';
+import HomeHeader from '../screens/home/components/HomeHeader';
 import {SCREENS} from '../screens/constants';
 import {useEffect} from 'react';
 import {CHANNELS, NotificationService} from '../services/notifications';

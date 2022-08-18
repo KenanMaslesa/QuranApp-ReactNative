@@ -3,9 +3,9 @@ import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 
 import SuraCard from './SuraCard';
-import Loader from './Loader';
-import {Sura} from '../shared/models';
-import {quranService} from '../services/quranService';
+import Loader from '../../../shared/components/Loader';
+import {Sura} from '../../../shared/models';
+import {quranService} from '../../../services/quranService';
 
 const SuraList = () => {
   const [suraList, setSuraList] = useState<Sura[]>();

@@ -1,11 +1,11 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import QuranScreen from '../screens/QuranScreen';
+import QuranScreen from '../screens/quran';
 import TopTabsNavigator from './TopTabsNavigator';
-import QuranPageHeader from '../components/QuranPageHeader';
+import QuranPageHeader from '../screens/quran/components/QuranPageHeader';
 import SettingsScreen from '../screens/SettingsScreen';
 import {SCREENS} from '../screens/constants';
-import Loader from '../components/Loader';
+import Loader from '../shared/components/Loader';
 import {useSelector} from 'react-redux';
 import {State} from '../redux/store';
 

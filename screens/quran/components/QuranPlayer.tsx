@@ -7,16 +7,16 @@ import SelectDropdown from 'react-native-select-dropdown';
 import SelectDropdownWithSearch from 'react-native-select-dropdown-with-search';
 const {width, height} = Dimensions.get('screen');
 
-import {qariList} from '../data/data';
+import {qariList} from '../../../data/data';
 import SoundPlayer from 'react-native-sound-player';
-import {State} from '../redux/store';
-import useQuranPlayer from '../hooks/useQuranPlayer';
-import {quranPlayerActions} from '../redux/slices/quranPlayerSlice';
-import {Qari} from '../shared/models';
+import {State} from '../../../redux/store';
+import useQuranPlayer from '../../../hooks/useQuranPlayer';
+import {quranPlayerActions} from '../../../redux/slices/quranPlayerSlice';
+import {Qari} from '../../../shared/models';
 import {
   getSelectedQari,
   setSelectedQari,
-} from '../redux/actions/quranPlayerActions';
+} from '../../../redux/actions/quranPlayerActions';
 
 const PLAYER_ICONS_SIZE = 25;
 interface SelectDropdownItem {

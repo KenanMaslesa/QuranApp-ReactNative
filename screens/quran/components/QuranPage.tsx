@@ -14,11 +14,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 const quranWordsNpm = require('@kmaslesa/holy-quran-word-by-word-min');
 
-import {headerActions} from '../redux/slices/headerSlice';
-import {Ayah, PageInfo, QuranData} from '../shared/models';
-import {State} from '../redux/store';
-import {quranService} from '../services/quranService';
-import useQuranPlayer from '../hooks/useQuranPlayer';
+import {headerActions} from '../../../redux/slices/headerSlice';
+import {Ayah, PageInfo, QuranData} from '../../../shared/models';
+import {State} from '../../../redux/store';
+import {quranService} from '../../../services/quranService';
+import useQuranPlayer from '../../../hooks/useQuranPlayer';
+import {surahTitleImage} from '../../../assets/images';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -92,7 +93,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
               <View style={styles.surahTitleWrapper}>
                 <Image
                   style={styles.surahTitleImage}
-                  source={require('../assets/images/surah_title.gif')}
+                  source={surahTitleImage}
                 />
                 <Text style={styles.surahTitleText(isDarkTheme)}>
                   {ayah.metaData?.suraName}

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Text, View} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {useDispatch} from 'react-redux';
-import {quranActions} from '../redux/slices/quranSlice';
+import {quranActions} from '../../../redux/slices/quranSlice';
 
 const quranTranslation = require('@kmaslesa/quran-translations');
 
