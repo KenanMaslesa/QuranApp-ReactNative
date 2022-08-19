@@ -7,6 +7,7 @@ import HomeHeader from '../screens/home/components/HomeHeader';
 import {SCREENS} from '../screens/constants';
 import {useEffect} from 'react';
 import {CHANNELS, NotificationService} from '../services/notifications';
+import Loader from '../shared/components/Loader';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,6 +23,16 @@ const TopTabsNavigator = () => {
         initialRouteName={SCREENS.SURA_SCREEN}
         screenOptions={{
           tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'darkgray',
+          tabBarIndicatorStyle: {
+            backgroundColor: 'gray',
+            height: 4,
+            borderRadius: 5,
+          },
+          lazy: false,
+          lazyPlaceholder: () => {
+            return <Loader />;
+          },
           tabBarLabelStyle: {fontSize: 14},
           tabBarStyle: {backgroundColor: 'white'},
         }}>

@@ -19,8 +19,8 @@ const JuzSuraCard = ({item}: JuzSuraCardProps) => {
     <>
       <TouchableHighlight onPress={() => goToPage(item.juz.startPage)}>
         <View style={styles.juzHeader}>
-          <Text>Dzuz {item.juz.juzNumber}</Text>
-          <Text style={styles.juzStartPage}>{item.juz.startPage}</Text>
+          <Text style={styles.darkColor}>Dzuz {item.juz.juzNumber}</Text>
+          <Text style={styles.darkColor}>{item.juz.startPage}</Text>
         </View>
       </TouchableHighlight>
 
@@ -29,20 +29,22 @@ const JuzSuraCard = ({item}: JuzSuraCardProps) => {
           key={`sura:${sura.index}`}
           onPress={() => goToPage(sura.startPage)}>
           <View style={styles.suraContainer}>
-            <Text style={styles.suraNumber}>{sura.index}</Text>
+            <Text style={{...styles.suraNumber, ...styles.darkColor}}>
+              {sura.index}
+            </Text>
             <View>
-              <Text style={styles.suraName}>
+              <Text style={{...styles.suraName, ...styles.darkColor}}>
                 {sura?.name.bosnianTranscription}
               </Text>
               <View style={styles.suraInfo}>
-                <Text style={styles.colorWhite}>{sura?.type}</Text>
-                <Text style={styles.colorWhite}> - </Text>
-                <Text style={styles.colorWhite}>
-                  {sura?.numberOfAyas} ajeta
-                </Text>
+                <Text style={styles.darkColor}>{sura?.type}</Text>
+                <Text style={styles.darkColor}> - </Text>
+                <Text style={styles.darkColor}>{sura?.numberOfAyas} ajeta</Text>
               </View>
             </View>
-            <Text style={styles.suraStartPage}>{sura.startPage}</Text>
+            <Text style={{...styles.suraStartPage, ...styles.darkColor}}>
+              {sura.startPage}
+            </Text>
           </View>
         </TouchableHighlight>
       ))}
@@ -57,39 +59,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     padding: 15,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  juzStartPage: {
-    position: 'absolute',
-    right: 10,
-    color: 'gray',
-  },
   suraContainer: {
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
     padding: 15,
-    marginBottom: 2,
     flexDirection: 'row',
     alignItems: 'center',
   },
   suraNumber: {
-    color: 'white',
     fontSize: 23,
     paddingRight: 30,
   },
   suraName: {
-    color: 'white',
     fontSize: 16,
     fontWeight: '500',
   },
   suraInfo: {
     flexDirection: 'row',
   },
-  colorWhite: {
-    color: 'white',
+  darkColor: {
+    color: 'black',
   },
   suraStartPage: {
     position: 'absolute',
-    right: 10,
-    color: 'white',
+    right: 15,
   },
 });

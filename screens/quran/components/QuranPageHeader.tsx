@@ -21,6 +21,7 @@ import {State} from '../../../redux/store';
 import {Bookmark, SuraName} from '../../../shared/models';
 import {settingsActions} from '../../../redux/slices/settingsSlice';
 import {quranActions} from '../../../redux/slices/quranSlice';
+import {months} from '../../../data/data';
 
 const QuranPageHeader = () => {
   const dispatch = useDispatch();
@@ -33,11 +34,14 @@ const QuranPageHeader = () => {
   );
 
   const addPageToBookmark = () => {
+    const date = new Date();
     const newBookmark: Bookmark = {
-      sura: pageInfo.currentSura,
+      sura: pageInfo.currentSura[0],
       juzNumber: pageInfo.currentJuz,
       pageNumber: pageInfo.currentPage,
-      date: new Date().toLocaleString(),
+      date: `${
+        months[date.getMonth()]
+      } ${date.getDate()}, ${date.getHours()}:${date.getMinutes()}`,
     };
     const tempBookmarks = [...bookmarks, newBookmark];
     dispatch(setBookmarks(tempBookmarks));

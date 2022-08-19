@@ -1,29 +1,16 @@
 import React from 'react';
-import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 
-import Loader from '../../../shared/components/Loader';
-import JuzCard from './JuzCard';
-import {Juz} from '../../../shared/models';
-import {quranService} from '../../../services/quranService';
+import {juzToHizb} from '../../../data/data';
+import JuzHizbCard from './JuzHizbCard';
 
 const JuzList = () => {
-  const [juzList, setJuzList] = useState<Juz[]>();
-
-  useEffect(() => {
-    setJuzList(quranService.getJuzList());
-  }, []);
-
   return (
     <View>
-      {juzList?.length !== 0 ? (
-        <FlatList
-          data={juzList}
-          renderItem={({item}) => <JuzCard juz={item} />}
-        />
-      ) : (
-        <Loader />
-      )}
+      <FlatList
+        data={juzToHizb}
+        renderItem={({item}) => <JuzHizbCard item={item} />}
+      />
     </View>
   );
 };

@@ -9,8 +9,8 @@ https://ionic.io/ionicons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-<MaterialCommunityIcons name="wifi-off" size={120} color={primary} />
-<Ionicons name={'arrow-back'} size={120} color={primary} />
+<MaterialCommunityIcons name="wifi-off" size={20} color={primary} />
+<Ionicons name={'arrow-back'} size={20} color={primary} />
 
 ```
 

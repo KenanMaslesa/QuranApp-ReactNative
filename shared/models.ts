@@ -84,7 +84,7 @@ export interface DispatchType<PayloadType> {
 }
 
 export interface Bookmark {
-  sura: SuraName[];
+  sura: SuraName;
   juzNumber: number;
   pageNumber: number;
   date: string;
@@ -95,7 +95,26 @@ export interface Qari {
   name: string;
 }
 
+// juz to sura
 export interface IJuzSuraCard {
   juz: {juzNumber: number; startPage: number};
   surahs: Sura[];
+}
+
+// juz to hizb
+export interface JuzToHizbModel {
+  juz: HizbJuz;
+  hizbs?: Hizb[] | null;
+}
+export interface HizbJuz {
+  juzNumber: number;
+  startPage: number;
+}
+export interface Hizb {
+  hizbNumber?: number | null;
+  suraName: string;
+  suraIndex: number;
+  ayahNumber: number;
+  page: number;
+  ayah: string;
 }
