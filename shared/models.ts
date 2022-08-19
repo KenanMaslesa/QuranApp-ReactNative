@@ -94,3 +94,8 @@ export interface Qari {
   value: string;
   name: string;
 }
+
+export interface IJuzSuraCard {
+  juz: {juzNumber: number; startPage: number};
+  surahs: Sura[];
+}

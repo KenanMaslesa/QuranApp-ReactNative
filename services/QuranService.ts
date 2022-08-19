@@ -9,6 +9,10 @@ const getJuzList = () => {
   return quranMetaData.getJuzList();
 };
 
+const getJuzById = (juzId: number) => {
+  return quranMetaData.getJuzById(juzId);
+};
+
 const getSuraList = () => {
   return quranMetaData.getSuraList();
 };
@@ -22,4 +26,5 @@ export const quranService = {
   getJuzList,
   getSuraList,
   getAyatDetailsByAyahIndex,
+  getJuzById,
 };
