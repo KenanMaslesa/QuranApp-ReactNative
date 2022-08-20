@@ -2,7 +2,10 @@ import {useState} from 'react';
 import {EmitterSubscription} from 'react-native';
 import SoundPlayer from 'react-native-sound-player'; //https://www.npmjs.com/package/react-native-sound-player
 import {useDispatch, useSelector} from 'react-redux';
-import {quranPlayerActions} from '../redux/slices/quranPlayerSlice';
+import {
+  quranPlayerActions,
+  REPEAT_OPTIONS,
+} from '../redux/slices/quranPlayerSlice';
 
 import {quranActions} from '../redux/slices/quranSlice';
 import {State} from '../redux/store';
@@ -12,7 +15,8 @@ import {formatNumberForAudioUrl} from '../utils/formatAudioUrl';
 
 let isFinishedPlaying: boolean = false;
 let subscriptionSoundPlayer: EmitterSubscription;
-let playingAyahIndexTemp: number | undefined = -1;
+let playingAyahIndexTemp: number = -1;
+let repeatAyahCounter: number = 0;
 
 enum AudioCharType {
   WORD = 'word',
@@ -23,16 +27,25 @@ type QuranPlayerReturnType = [
   (word: Word | null) => void, // playWord
   string | null | undefined, // playingWord
   () => void, // resetPlayingAyahAndWord
+  () => void, // stopPlayerAndRemoveSubscription
 ];
 const useQuranPlayer = (): QuranPlayerReturnType => {
   const dispatch = useDispatch();
   const [playingWord, setPlayingWord] = useState<string | null>();
-  const {selectedQari} = useSelector((state: State) => state.quranPlayer);
+  const {selectedQari, repeatNumber} = useSelector(
+    (state: State) => state.quranPlayer,
+  );
   const {currentPage} = useSelector((state: State) => state.quran);
 
-  const playAyahAudio = async (ayahIndex: number | undefined) => {
+  const playAyahAudio = async (
+    ayahIndex: number | undefined,
+    calledByUser: boolean = true,
+  ) => {
+    if (calledByUser) {
+      repeatAyahCounter = 0;
+    }
     resetPlayingAyahAndWord();
-    playingAyahIndexTemp = ayahIndex;
+    playingAyahIndexTemp = ayahIndex ? ayahIndex : -1;
     dispatch(quranPlayerActions.setPlayingAyahIndex(ayahIndex));
 
     const ayahDetails = quranService.getAyatDetailsByAyahIndex(ayahIndex);
@@ -52,6 +65,8 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
     dispatch(quranPlayerActions.setIsPlaying(true));
     isFinishedPlaying = false;
 
+    console.log(repeatNumber);
+
     try {
       if (subscriptionSoundPlayer && !isFinishedPlaying) {
         subscriptionSoundPlayer.remove();
@@ -64,8 +79,23 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
           isFinishedPlaying = true;
           subscriptionSoundPlayer.remove();
           resetPlayingAyahAndWord();
-          let temp = playingAyahIndexTemp ? playingAyahIndexTemp + 1 : 0;
-          playAyahAudio(temp);
+
+          let ayahIndex: number;
+          if (repeatNumber === REPEAT_OPTIONS.NO_REPEAT) {
+            ayahIndex = playingAyahIndexTemp + 1; // play next ayah
+          } else if (repeatNumber === REPEAT_OPTIONS.INFINITY) {
+            ayahIndex = playingAyahIndexTemp; // play the same ayah
+          } else if (repeatAyahCounter >= repeatNumber) {
+            // repeating is done
+            repeatAyahCounter = 0; // reset counter
+            ayahIndex = playingAyahIndexTemp + 1; // play next ayah
+          } else {
+            // repeating is in progress
+            repeatAyahCounter++;
+            ayahIndex = playingAyahIndexTemp; // play the same ayah
+          }
+
+          playAyahAudio(ayahIndex, false);
         },
       );
     } catch (error) {
@@ -76,6 +106,12 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
   const resetPlayingAyahAndWord = () => {
     dispatch(quranPlayerActions.setPlayingAyahIndex(0));
     setPlayingWord('null');
+  };
+
+  const stopPlayerAndRemoveSubscription = () => {
+    repeatAyahCounter = 0;
+    SoundPlayer.stop();
+    subscriptionSoundPlayer.remove();
   };
 
   const playWord = (word: Word | null) => {
@@ -103,7 +139,13 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
     }
   };
 
-  return [playAyahAudio, playWord, playingWord, resetPlayingAyahAndWord];
+  return [
+    playAyahAudio,
+    playWord,
+    playingWord,
+    resetPlayingAyahAndWord,
+    stopPlayerAndRemoveSubscription,
+  ];
 };
 
 export default useQuranPlayer;

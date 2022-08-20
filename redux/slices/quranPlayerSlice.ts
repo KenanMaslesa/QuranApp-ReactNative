@@ -2,12 +2,17 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {qariList} from '../../data/data';
 import {Qari} from '../../shared/models';
 
+export const REPEAT_OPTIONS = {
+  NO_REPEAT: 0,
+  INFINITY: 4,
+};
 export interface QuranPlayerSlice {
   playingAyahIndex?: number;
   isPlaying: boolean;
   isStoped: boolean;
   qariList: Qari[];
   selectedQari: Qari;
+  repeatNumber: number;
 }
 
 const initialState: QuranPlayerSlice = {
@@ -19,6 +24,7 @@ const initialState: QuranPlayerSlice = {
     value: 'Alafasy_128kbps',
     name: 'Mishary Alafasy',
   },
+  repeatNumber: REPEAT_OPTIONS.NO_REPEAT,
 };
 
 const quranPlayerSlice = createSlice({
@@ -39,6 +45,16 @@ const quranPlayerSlice = createSlice({
     },
     setIsStoped: (state, {payload}: PayloadAction<boolean>) => {
       state.isStoped = payload;
+    },
+    toggleRepeatNumber: state => {
+      if (state.repeatNumber === REPEAT_OPTIONS.INFINITY) {
+        state.repeatNumber = REPEAT_OPTIONS.INFINITY;
+      }
+      if (state.repeatNumber >= REPEAT_OPTIONS.INFINITY) {
+        state.repeatNumber = REPEAT_OPTIONS.NO_REPEAT;
+      } else {
+        state.repeatNumber = state.repeatNumber + 1;
+      }
     },
   },
 });
