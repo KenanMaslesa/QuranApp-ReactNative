@@ -4,7 +4,7 @@ import {Ayah, QuranData, Word} from './transformQuranData';
 const quranWordsNpm = require('@kmaslesa/quran-word-by-word');
 
 let page = 1;
-const QURAN_PAGES_NUMBER = 1;
+const QURAN_PAGES_NUMBER = 604;
 const quranPagesArray: QuranData[] = [];
 
 const groupLinesByVerses = (verses: Ayah[]): Word[] => {
@@ -38,7 +38,9 @@ const GetQuranData = () => {
       console.log(JSON.stringify(quranPagesArray));
       return;
     }
-    fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?words=true`)
+    fetch(
+      `https://api.quran.com/api/v4/verses/by_page/${page}?words=true&word_fields=code_v1,code_v2`,
+    )
       .then(res => res.json())
       .then(data => {
         const allPageWords = groupLinesByVerses(data.verses);
@@ -62,15 +64,19 @@ const GetQuranData = () => {
         });
 
         const npmQuranWords = quranWordsNpm.getWordsByPage(page);
-        console.log(npmQuranWords.ayahs);
 
         let npmAyahIndex = 0;
-        npmQuranWords.ayahs.forEach(npmAyah => {
-          if (npmAyah.words.length !== 0) {
-            npmAyah.words = quranData.ayahs[npmAyahIndex].words;
-            npmAyahIndex++;
-          }
-        });
+        npmQuranWords?.ayahs.forEach(
+          (npmAyah: {words: string | any[] | null | undefined}) => {
+            if (
+              npmAyah?.words?.length !== 0 &&
+              npmAyahIndex < npmAyah?.words?.length
+            ) {
+              npmAyah.words = quranData.ayahs[npmAyahIndex].words;
+              npmAyahIndex++;
+            }
+          },
+        );
         console.log(page);
         quranPagesArray.push(npmQuranWords);
         page++;
