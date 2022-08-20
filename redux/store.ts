@@ -3,13 +3,13 @@ import {bookmarkReducer} from './slices/bookmarksSlice';
 import {headerReducer} from './slices/headerSlice';
 import {quranPlayerReducer} from './slices/quranPlayerSlice';
 import {quranReducer} from './slices/quranSlice';
-import {settingsReducer} from './slices/settingsSlice';
+import {themeReducer} from './slices/themeSlice';
 
 export const store = configureStore({
   reducer: {
     header: headerReducer,
     bookmark: bookmarkReducer,
-    settings: settingsReducer,
+    theme: themeReducer,
     quran: quranReducer,
     quranPlayer: quranPlayerReducer,
   },

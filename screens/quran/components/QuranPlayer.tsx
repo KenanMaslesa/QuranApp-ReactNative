@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
-import SelectDropdown from 'react-native-select-dropdown';
 import SelectDropdownWithSearch from 'react-native-select-dropdown-with-search';
 const {width, height} = Dimensions.get('screen');
 
@@ -17,6 +16,7 @@ import {
   getSelectedQari,
   setSelectedQari,
 } from '../../../redux/actions/quranPlayerActions';
+import useThemeColor from '../../../style/useTheme';
 
 const PLAYER_ICONS_SIZE = 25;
 interface SelectDropdownItem {
@@ -25,10 +25,13 @@ interface SelectDropdownItem {
 }
 const QuranPlayer = () => {
   const dispatch = useDispatch();
+  const [themeColorStyle] = useThemeColor();
+
   const {isPlaying, isStoped, selectedQari, playingAyahIndex} = useSelector(
     (state: State) => state.quranPlayer,
   );
-  const [playAyahAudio, resetPlayingAyahAndWord] = useQuranPlayer();
+  const [playAyahAudio, playWord, playingWord, resetPlayingAyahAndWord] =
+    useQuranPlayer();
 
   useEffect(() => {
     dispatch(getSelectedQari());
@@ -64,7 +67,7 @@ const QuranPlayer = () => {
   };
 
   return (
-    <View style={styles.playerContainer}>
+    <View style={[styles.playerContainer, themeColorStyle.backgroundTertiary]}>
       {isStoped ? (
         <View>
           <SelectDropdownWithSearch
@@ -86,9 +89,19 @@ const QuranPlayer = () => {
               return `${index + 1}. ${item.name}`;
             }}
             buttonStyle={styles.dropdownButtonStyle}
-            dropdownStyle={styles.dropdownStyle}
-            rowStyle={styles.dropdownRowStyle}
-            rowTextStyle={styles.dropdownTextStyle}
+            buttonTextStyle={themeColorStyle.colorPrimary}
+            dropdownStyle={[
+              styles.dropdownStyle,
+              themeColorStyle.backgroundTertiary,
+            ]}
+            rowStyle={[
+              styles.dropdownRowStyle,
+              themeColorStyle.backgroundPrimary,
+            ]}
+            rowTextStyle={[
+              styles.dropdownTextStyle,
+              themeColorStyle.colorPrimary,
+            ]}
             dropdownOverlayColor={'#0008'}
           />
         </View>
@@ -97,41 +110,69 @@ const QuranPlayer = () => {
           <TouchableOpacity
             style={styles.playerIcon}
             onPress={() => stopPlaying()}>
-            <Ionicons name={'stop'} size={PLAYER_ICONS_SIZE} />
+            <Ionicons
+              name={'stop'}
+              style={themeColorStyle.colorPrimary}
+              size={PLAYER_ICONS_SIZE}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.playerIcon}
             onPress={() => playPreviousAyah()}>
-            <Ionicons name={'play-skip-back'} size={PLAYER_ICONS_SIZE} />
+            <Ionicons
+              name={'play-skip-back'}
+              style={themeColorStyle.colorPrimary}
+              size={PLAYER_ICONS_SIZE}
+            />
           </TouchableOpacity>
 
           {isPlaying ? (
             <TouchableOpacity
               style={styles.playerIcon}
               onPress={() => pausePlaying()}>
-              <Ionicons name={'pause'} size={PLAYER_ICONS_SIZE} />
+              <Ionicons
+                name={'pause'}
+                style={themeColorStyle.colorPrimary}
+                size={PLAYER_ICONS_SIZE}
+              />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={styles.playerIcon}
               onPress={() => resumePlaying()}>
-              <Ionicons name={'play'} size={PLAYER_ICONS_SIZE} />
+              <Ionicons
+                name={'play'}
+                style={themeColorStyle.colorPrimary}
+                size={PLAYER_ICONS_SIZE}
+              />
             </TouchableOpacity>
           )}
 
           <TouchableOpacity
             style={styles.playerIcon}
             onPress={() => playNextAyah()}>
-            <Ionicons name={'play-skip-forward'} size={PLAYER_ICONS_SIZE} />
+            <Ionicons
+              name={'play-skip-forward'}
+              style={themeColorStyle.colorPrimary}
+              size={PLAYER_ICONS_SIZE}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.playerIcon}>
-            <Ionicons name={'repeat'} size={PLAYER_ICONS_SIZE} />
+            <Ionicons
+              name={'repeat'}
+              style={themeColorStyle.colorPrimary}
+              size={PLAYER_ICONS_SIZE}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.playerIcon}>
-            <Ionicons name={'settings'} size={PLAYER_ICONS_SIZE} />
+            <Ionicons
+              name={'settings'}
+              style={themeColorStyle.colorPrimary}
+              size={PLAYER_ICONS_SIZE}
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -147,7 +188,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'lightgray',
     height: 50,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -163,7 +203,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   dropdownStyle: {
-    backgroundColor: 'lightgray',
     width: width - 120,
     height: height - 200,
   },
@@ -171,7 +210,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   dropdownRowStyle: {
-    backgroundColor: 'white',
     height: 65,
   },
   dropdownTextStyle: {

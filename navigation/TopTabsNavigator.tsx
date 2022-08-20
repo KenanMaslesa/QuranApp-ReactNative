@@ -8,10 +8,13 @@ import {SCREENS} from '../screens/constants';
 import {useEffect} from 'react';
 import {CHANNELS, NotificationService} from '../services/notifications';
 import Loader from '../shared/components/Loader';
+import useThemeColor from '../style/useTheme';
 
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabsNavigator = () => {
+  const [themeColorStyle, themeColors] = useThemeColor();
+
   useEffect(() => {
     NotificationService.createChannel(CHANNELS.Quran);
   }, []);
@@ -22,10 +25,10 @@ const TopTabsNavigator = () => {
       <Tab.Navigator
         initialRouteName={SCREENS.SURA_SCREEN}
         screenOptions={{
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: 'darkgray',
+          tabBarActiveTintColor: themeColors.colorPrimary,
+          tabBarInactiveTintColor: themeColors.colorTertiary,
           tabBarIndicatorStyle: {
-            backgroundColor: 'gray',
+            backgroundColor: themeColors.colorTertiary,
             height: 4,
             borderRadius: 5,
           },
@@ -34,7 +37,7 @@ const TopTabsNavigator = () => {
             return <Loader />;
           },
           tabBarLabelStyle: {fontSize: 14},
-          tabBarStyle: {backgroundColor: 'white'},
+          tabBarStyle: {backgroundColor: themeColors.backgroundPrimary},
         }}>
         <Tab.Screen
           name={SCREENS.SURA_SCREEN}

@@ -97,7 +97,7 @@ const SettingsScreen = () => {
           getScheduledNotifications
         </Text>
         {scheduledNotifications.map(notification => (
-          <View style={styles.notification}>
+          <View style={styles.notification} key={notification.id}>
             <Text>
               {notification.title} - {notification.message}
             </Text>

@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import useThemeColor from '../../../style/useTheme';
 import {IJuzSuraCard} from '../../../shared/models';
 import {SCREENS} from '../../constants';
 
@@ -9,6 +10,7 @@ interface JuzSuraCardProps {
 }
 const JuzSuraCard = ({item}: JuzSuraCardProps) => {
   const navigation = useNavigation();
+  const [themeColorStyle] = useThemeColor();
 
   const goToPage = (page: number) => {
     navigation.navigate(SCREENS.QURAN_SCREEN, {
@@ -18,9 +20,11 @@ const JuzSuraCard = ({item}: JuzSuraCardProps) => {
   return (
     <>
       <TouchableHighlight onPress={() => goToPage(item.juz.startPage)}>
-        <View style={styles.juzHeader}>
-          <Text style={styles.darkColor}>Dzuz {item.juz.juzNumber}</Text>
-          <Text style={styles.darkColor}>{item.juz.startPage}</Text>
+        <View style={[styles.juzHeader, themeColorStyle.backgroundTertiary]}>
+          <Text style={themeColorStyle.colorPrimary}>
+            Dzuz {item.juz.juzNumber}
+          </Text>
+          <Text style={themeColorStyle.colorPrimary}>{item.juz.startPage}</Text>
         </View>
       </TouchableHighlight>
 
@@ -28,21 +32,24 @@ const JuzSuraCard = ({item}: JuzSuraCardProps) => {
         <TouchableHighlight
           key={`sura:${sura.index}`}
           onPress={() => goToPage(sura.startPage)}>
-          <View style={styles.suraContainer}>
-            <Text style={{...styles.suraNumber, ...styles.darkColor}}>
+          <View
+            style={[styles.suraContainer, themeColorStyle.backgroundPrimary]}>
+            <Text style={[styles.suraNumber, themeColorStyle.colorPrimary]}>
               {sura.index}
             </Text>
             <View>
-              <Text style={{...styles.suraName, ...styles.darkColor}}>
+              <Text style={[styles.suraName, themeColorStyle.colorPrimary]}>
                 {sura?.name.bosnianTranscription}
               </Text>
               <View style={styles.suraInfo}>
-                <Text style={styles.darkColor}>{sura?.type}</Text>
-                <Text style={styles.darkColor}> - </Text>
-                <Text style={styles.darkColor}>{sura?.numberOfAyas} ajeta</Text>
+                <Text style={themeColorStyle.colorPrimary}>{sura?.type}</Text>
+                <Text style={themeColorStyle.colorPrimary}> - </Text>
+                <Text style={themeColorStyle.colorPrimary}>
+                  {sura?.numberOfAyas} ajeta
+                </Text>
               </View>
             </View>
-            <Text style={{...styles.suraStartPage, ...styles.darkColor}}>
+            <Text style={[styles.suraStartPage, themeColorStyle.colorPrimary]}>
               {sura.startPage}
             </Text>
           </View>
@@ -56,14 +63,12 @@ export default JuzSuraCard;
 
 const styles = StyleSheet.create({
   juzHeader: {
-    backgroundColor: 'lightgray',
     padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   suraContainer: {
-    backgroundColor: 'white',
     padding: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -78,9 +83,6 @@ const styles = StyleSheet.create({
   },
   suraInfo: {
     flexDirection: 'row',
-  },
-  darkColor: {
-    color: 'black',
   },
   suraStartPage: {
     position: 'absolute',

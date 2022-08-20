@@ -20,6 +20,7 @@ import {State} from '../../../redux/store';
 import {quranService} from '../../../services/quranService';
 import useQuranPlayer from '../../../hooks/useQuranPlayer';
 import {surahTitleImage} from '../../../assets/images';
+import useThemeColor from '../../../style/useTheme';
 
 enum LineType {
   BISMILLAH = 'besmellah',
@@ -27,11 +28,11 @@ enum LineType {
 }
 interface QuranPageProps {
   page: number;
-  isDarkTheme: boolean;
 }
 
-const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
+const QuranPage = ({page}: QuranPageProps) => {
   const dispatch = useDispatch();
+  const [themeColorStyle, themeColors] = useThemeColor();
 
   const [quranWords, setQuranWords] = useState<QuranData>();
   const [pageInfo, setPageInfo] = useState<PageInfo>();
@@ -77,7 +78,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
       <Pressable
         style={styles.pressableContainer}
         onPress={() => toggleHeader()}>
-        <Text style={styles.suraInfo}>
+        <Text style={[styles.suraInfo, themeColorStyle.colorPrimary]}>
           {pageInfo?.sura.map((item, index) => (
             <Text key={item.bosnian}>
               {item.bosnianTranscription}
@@ -85,7 +86,9 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
             </Text>
           ))}
         </Text>
-        <Text style={styles.juzInfo}>Džuz {pageInfo?.juz}</Text>
+        <Text style={[styles.juzInfo, themeColorStyle.colorPrimary]}>
+          Džuz {pageInfo?.juz}
+        </Text>
 
         {quranWords?.ayahs?.map((ayah: Ayah, ayahIndex: number) => (
           <View style={styles.ayaLine} key={`ayah:${ayahIndex}`}>
@@ -95,7 +98,8 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
                   style={styles.surahTitleImage}
                   source={surahTitleImage}
                 />
-                <Text style={styles.surahTitleText(isDarkTheme)}>
+                <Text
+                  style={[styles.surahTitleText, themeColorStyle.colorPrimary]}>
                   {ayah.metaData?.suraName}
                 </Text>
               </View>
@@ -103,7 +107,9 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
 
             {ayah.metaData?.lineType === LineType.BISMILLAH && (
               <View>
-                <Text style={styles.bismillah}>﷽</Text>
+                <Text style={[styles.bismillah, themeColorStyle.colorPrimary]}>
+                  ﷽
+                </Text>
               </View>
             )}
 
@@ -118,9 +124,7 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
                       playingAyahIndex === word?.ayahIndex ||
                       playingWord === word?.audio
                         ? 'blue'
-                        : isDarkTheme
-                        ? 'white'
-                        : 'black',
+                        : themeColors.quranWordColor,
                   }}
                   key={word?.codeV1}
                   onPress={() => playWord(word)}
@@ -130,7 +134,9 @@ const QuranPage = ({page, isDarkTheme}: QuranPageProps) => {
               ))}
           </View>
         ))}
-        <Text style={styles.pageInfo}>{pageInfo?.pageNumber}</Text>
+        <Text style={[styles.pageInfo, themeColorStyle.colorPrimary]}>
+          {pageInfo?.pageNumber}
+        </Text>
       </Pressable>
     </>
   );
@@ -162,7 +168,6 @@ const styles = StyleSheet.create({
     fontFamily: 'bismillah',
     fontWeight: '400',
     fontSize: 40,
-    color: 'black',
   },
   surahTitleWrapper: {
     display: 'flex',
@@ -176,10 +181,9 @@ const styles = StyleSheet.create({
     width: width - 20,
     height: 40,
   },
-  surahTitleText: (isDarkTheme: boolean) => ({
+  surahTitleText: {
     position: 'absolute',
-    color: isDarkTheme ? 'white' : 'black',
-  }),
+  },
   loading: {
     height,
     width,

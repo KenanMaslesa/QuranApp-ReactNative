@@ -18,8 +18,13 @@ enum AudioCharType {
   WORD = 'word',
   END_ICON = 'end',
 }
-
-const useQuranPlayer = () => {
+type QuranPlayerReturnType = [
+  (ayahIndex: number | undefined) => void, // playAyahAudio
+  (word: Word | null) => void, // playWord
+  string | null | undefined, // playingWord
+  () => void, // resetPlayingAyahAndWord
+];
+const useQuranPlayer = (): QuranPlayerReturnType => {
   const dispatch = useDispatch();
   const [playingWord, setPlayingWord] = useState<string | null>();
   const {selectedQari} = useSelector((state: State) => state.quranPlayer);

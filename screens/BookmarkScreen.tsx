@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
 import {
-  Button,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,10 +15,13 @@ import {State} from '../redux/store';
 import {asyncStorageService} from '../services/asyncStorageService';
 import {ASYNC_STORAGE_KEYS} from '../shared/AsyncStorageKeys';
 import {Bookmark} from '../shared/models';
+import useThemeColor from '../style/useTheme';
 import {SCREENS} from './constants';
 
 const BookmarkScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
+  const [themeColorStyle] = useThemeColor();
+
   const bookmarks = useSelector((state: State) => state.bookmark.bookmarks);
 
   const removeAllBookmarsk = () => {
@@ -33,11 +34,10 @@ const BookmarkScreen = ({navigation}: any) => {
   }, [dispatch]);
 
   return (
-    <ScrollView>
+    <ScrollView style={themeColorStyle.backgroundPrimary}>
       <>
         {bookmarks.map((bookmark: Bookmark) => (
           <TouchableHighlight
-            style={styles.bookmarkItemContainer}
             key={bookmark.pageNumber}
             onPress={() => {
               navigation.navigate(SCREENS.QURAN_SCREEN, {
@@ -46,23 +46,30 @@ const BookmarkScreen = ({navigation}: any) => {
             }}>
             <View style={styles.bookmarkItem}>
               <Ionicons
-                style={styles.bookmarkIcon}
+                style={[styles.bookmarkIcon, themeColorStyle.colorTertiary]}
                 name={'bookmark'}
                 size={30}
               />
               <View>
-                <Text style={styles.suraName}>
+                <Text style={[styles.suraName, themeColorStyle.colorPrimary]}>
                   {bookmark.sura.bosnianTranscription}
                 </Text>
                 <View style={styles.flexDirectionRow}>
-                  <Text style={styles.fontSize}>
+                  <Text style={[styles.fontSize, themeColorStyle.colorPrimary]}>
                     Stranica {bookmark.pageNumber},{' '}
                   </Text>
-                  <Text style={styles.fontSize}>Dzuz {bookmark.juzNumber}</Text>
-                  <Text style={styles.fontSize}> ◆ {bookmark.date} 🕐</Text>
+                  <Text style={[styles.fontSize, themeColorStyle.colorPrimary]}>
+                    Dzuz {bookmark.juzNumber}
+                  </Text>
+                  <Text style={[styles.fontSize, themeColorStyle.colorPrimary]}>
+                    {' '}
+                    ◆ {bookmark.date} 🕐
+                  </Text>
                 </View>
               </View>
-              <Text style={styles.bookmarkPage}>{bookmark.pageNumber}</Text>
+              <Text style={[styles.bookmarkPage, themeColorStyle.colorPrimary]}>
+                {bookmark.pageNumber}
+              </Text>
             </View>
           </TouchableHighlight>
         ))}
@@ -70,7 +77,11 @@ const BookmarkScreen = ({navigation}: any) => {
         {bookmarks.length > 1 && (
           <View style={styles.center}>
             <TouchableOpacity onPress={removeAllBookmarsk}>
-              <Ionicons style={styles.bookmarkIcon} name={'trash'} size={30} />
+              <Ionicons
+                style={[styles.bookmarkIcon, themeColorStyle.colorTertiary]}
+                name={'trash'}
+                size={30}
+              />
             </TouchableOpacity>
           </View>
         )}
@@ -85,10 +96,6 @@ const styles = StyleSheet.create({
   flexDirectionRow: {
     flexDirection: 'row',
   },
-  bookmarkItemContainer: {
-    backgroundColor: 'lightgray',
-    marginBottom: 20,
-  },
   bookmarkItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -100,7 +107,8 @@ const styles = StyleSheet.create({
     right: 10,
   },
   bookmarkIcon: {
-    paddingRight: 10,
+    padding: 10,
+    paddingRight: 15,
   },
   suraName: {
     fontWeight: '600',

@@ -1,15 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export interface SettingsSlice {
+export interface ThemeSlice {
   isDarkTheme: boolean;
 }
 
-const initialState: SettingsSlice = {
+const initialState: ThemeSlice = {
   isDarkTheme: false,
 };
 
-const settingsSlice = createSlice({
-  name: 'settings',
+const themeSlice = createSlice({
+  name: 'theme',
   initialState,
   reducers: {
     setIsDarkTheme: (state, {payload}: PayloadAction<boolean>) => {
@@ -18,5 +18,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const settingsReducer = settingsSlice.reducer;
-export const settingsActions = settingsSlice.actions;
+export const themeReducer = themeSlice.reducer;
+export const themeActions = themeSlice.actions;

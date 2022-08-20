@@ -19,19 +19,26 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 import {State} from '../../../redux/store';
 import {Bookmark, SuraName} from '../../../shared/models';
-import {settingsActions} from '../../../redux/slices/settingsSlice';
 import {quranActions} from '../../../redux/slices/quranSlice';
 import {months} from '../../../data/data';
+import {setTheme} from '../../../redux/actions/themeActions';
+import useThemeColor from '../../../style/useTheme';
 
 const QuranPageHeader = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [themeColorStyle] = useThemeColor();
+
   const {pageInfo, showHeader} = useSelector((state: State) => state.header);
   const bookmarks = useSelector((state: State) => state.bookmark.bookmarks);
-  const isDarkTheme = useSelector((state: State) => state.settings.isDarkTheme);
+  const isDarkTheme = useSelector((state: State) => state.theme.isDarkTheme);
   const {fontSize, showTranslation} = useSelector(
     (state: State) => state.quran,
   );
+
+  const headerStyle = {
+    top: showHeader ? 0 : -100,
+  };
 
   const addPageToBookmark = () => {
     const date = new Date();
@@ -53,99 +60,33 @@ const QuranPageHeader = () => {
     );
   };
 
-  const styles = StyleSheet.create({
-    header: {
-      backgroundColor: isDarkTheme ? 'black' : 'lightgray',
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      justifyContent: 'center',
-      padding: 10,
-      height: 55,
-      top: showHeader ? 0 : -100,
-    },
-    backArrow: {
-      width: 24,
-      color: isDarkTheme ? 'white' : 'black',
-    },
-    verticalDots: {
-      position: 'absolute',
-      right: 10,
-      color: isDarkTheme ? 'white' : 'black',
-    },
-    bookmark: {
-      position: 'absolute',
-      right: 50,
-      color: isDarkTheme ? 'white' : 'black',
-    },
-    pageInfoContainer: {
-      position: 'absolute',
-      left: 80,
-    },
-    suraInfoContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-    suraInfo: {
-      fontSize: 16,
-      fontWeight: '500',
-      color: isDarkTheme ? 'white' : 'black',
-    },
-    juzInfo: {
-      color: isDarkTheme ? 'white' : 'black',
-    },
-    popoverContainer: {
-      width: 200,
-    },
-    popoverItem: {
-      padding: 20,
-    },
-    fontSizeContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 0.5,
-      borderColor: 'gray',
-    },
-    fontSizeButton: {
-      width: 30,
-      backgroundColor: 'blue',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 100,
-      padding: 5,
-      margin: 10,
-    },
-    fontSizeButtonText: {
-      color: 'white',
-      fontSize: 16,
-    },
-    quranFontSize: {
-      fontSize: 16,
-    },
-  });
-
   return (
-    <Animated.View style={styles.header}>
+    <Animated.View
+      style={[styles.header, themeColorStyle.backgroundTertiary, headerStyle]}>
       <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}>
-        <Ionicons name={'arrow-back'} style={styles.backArrow} size={24} />
+        <Ionicons
+          name={'arrow-back'}
+          style={[styles.backArrow, themeColorStyle.colorPrimary]}
+          size={24}
+        />
       </TouchableOpacity>
 
       <View style={styles.pageInfoContainer}>
         <>
           <View style={styles.suraInfoContainer}>
             {pageInfo.currentSura.map((sura: SuraName, suraIndex: number) => (
-              <Text key={sura.bosnian} style={styles.suraInfo}>
+              <Text
+                key={sura.bosnian}
+                style={[styles.suraInfo, themeColorStyle.colorPrimary]}>
                 {sura.bosnianTranscription}
                 {suraIndex < pageInfo.currentSura.length - 1 && <Text>, </Text>}
               </Text>
             ))}
           </View>
-          <Text style={styles.juzInfo}>
+          <Text style={themeColorStyle.colorPrimary}>
             Stranica {pageInfo.currentPage}, Dzuz {pageInfo.currentJuz}
           </Text>
         </>
@@ -154,6 +95,7 @@ const QuranPageHeader = () => {
       <TouchableOpacity style={styles.bookmark} onPress={addPageToBookmark}>
         <Ionicons
           name={isPageInBookmarks() ? 'bookmark' : 'bookmark-outline'}
+          style={themeColorStyle.colorPrimary}
           size={24}
         />
       </TouchableOpacity>
@@ -165,7 +107,11 @@ const QuranPageHeader = () => {
         arrowSize={{width: 0, height: 0}}
         from={
           <TouchableOpacity style={styles.verticalDots}>
-            <Ionicons name={'ellipsis-vertical'} size={24} />
+            <Ionicons
+              name={'ellipsis-vertical'}
+              style={themeColorStyle.colorPrimary}
+              size={24}
+            />
           </TouchableOpacity>
         }>
         <View style={styles.popoverContainer}>
@@ -181,7 +127,7 @@ const QuranPageHeader = () => {
             }}
             text="Dark mode"
             onPress={(isChecked: boolean) => {
-              dispatch(settingsActions.setIsDarkTheme(isChecked));
+              dispatch(setTheme(isChecked));
             }}
           />
 
@@ -224,3 +170,67 @@ const QuranPageHeader = () => {
 };
 
 export default QuranPageHeader;
+
+const styles = StyleSheet.create({
+  header: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    padding: 10,
+    height: 55,
+  },
+  backArrow: {
+    width: 24,
+  },
+  verticalDots: {
+    position: 'absolute',
+    right: 10,
+  },
+  bookmark: {
+    position: 'absolute',
+    right: 50,
+  },
+  pageInfoContainer: {
+    position: 'absolute',
+    left: 80,
+  },
+  suraInfoContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  suraInfo: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  popoverContainer: {
+    width: 200,
+  },
+  popoverItem: {
+    padding: 20,
+  },
+  fontSizeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: 'gray',
+  },
+  fontSizeButton: {
+    width: 30,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    padding: 5,
+    margin: 10,
+  },
+  fontSizeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  quranFontSize: {
+    fontSize: 16,
+  },
+});

@@ -12,6 +12,7 @@ import {State} from '../../redux/store';
 import {quranService} from '../../services/quranService';
 import {PageInfo} from '../../shared/models';
 import {createArray} from '../../utils/createArray';
+import useThemeColor from '../../style/useTheme';
 
 interface FlatListViewableItem {
   index: number;
@@ -23,7 +24,8 @@ interface FlatListViewableItem {
 
 const QuranScreen = ({route}: any) => {
   const dispatch = useDispatch();
-  const isDarkTheme = useSelector((state: State) => state.settings.isDarkTheme);
+  const [themeColorStyle] = useThemeColor();
+
   const {currentPage, showTranslation, scrollToPage} = useSelector(
     (state: State) => state.quran,
   );
@@ -54,8 +56,8 @@ const QuranScreen = ({route}: any) => {
 
   const renderItem = ({item}: any) => (
     <ScrollView>
-      <View style={styles.page(isDarkTheme)}>
-        <QuranPage page={item} isDarkTheme={isDarkTheme} />
+      <View style={[styles.page, themeColorStyle.backgroundPrimary]}>
+        <QuranPage page={item} />
       </View>
     </ScrollView>
   );
@@ -91,9 +93,9 @@ const QuranScreen = ({route}: any) => {
         onViewableItemsChanged={onViewableItemsChanged.current}
         initialScrollIndex={route.params.startPage - 1}
         ref={flatListRef}
-        initialNumToRender={1}
-        maxToRenderPerBatch={1}
-        windowSize={5} //https://reactnative.dev/docs/optimizing-flatlist-configuration
+        initialNumToRender={3}
+        maxToRenderPerBatch={2}
+        windowSize={5} // https://reactnative.dev/docs/optimizing-flatlist-configuration#windowsize
         data={pages}
         inverted
         horizontal
@@ -124,15 +126,14 @@ const styles = StyleSheet.create({
     overflow: 'scroll',
     flex: 1,
   },
-  page: (isDarkTheme: boolean) => ({
+  page: {
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: 'gray',
     borderWidth: 0.2,
     height: height - 55,
     width,
-    backgroundColor: isDarkTheme ? 'black' : 'white',
-  }),
+  },
 });
 
 export default QuranScreen;
