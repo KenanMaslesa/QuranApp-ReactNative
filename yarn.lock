@@ -6017,11 +6017,6 @@
   "resolved" "https://registry.npmjs.org/react-native-modalize/-/react-native-modalize-2.1.0.tgz"
   "version" "2.1.0"
 
-"react-native-navigation-bar-color@^2.0.1":
-  "integrity" "sha512-1kE/oxWt+HYjRxdZdvke9tJ365xaee5n3+euOQA1En8zQuSbOxiE4SYEGM7TeaWnmLJ0l37mRnPHaB2H4mGh0A=="
-  "resolved" "https://registry.npmjs.org/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.1.tgz"
-  "version" "2.0.1"
-
 "react-native-pager-view@^5.4.25":
   "integrity" "sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg=="
   "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.25.tgz"
@@ -6067,6 +6062,11 @@
   "integrity" "sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA=="
   "resolved" "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz"
   "version" "3.3.0"
+
+"react-native-system-navigation-bar@^2.0.0":
+  "integrity" "sha512-gvhwhl7uH+RJIoq8QdEXqdJkOMqiRwTS2vmpovactKTaTtMmoU3nYxjI9WrjBNNBFMZZDmuoWtZXrvcCdkARCg=="
+  "resolved" "https://registry.npmjs.org/react-native-system-navigation-bar/-/react-native-system-navigation-bar-2.0.0.tgz"
+  "version" "2.0.0"
 
 "react-native-tab-view@^3.1.1":
   "integrity" "sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw=="

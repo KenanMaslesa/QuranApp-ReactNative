@@ -6,27 +6,29 @@ export interface Color {
   colorSecondary: string;
   colorTertiary: string;
   quranWordColor: string;
+  quranWordBackgroundColor: string;
 }
+// https://www.hexcolortool.com/
 
 export const lightColors: Color = {
-  backgroundPrimary: '#FFFFFF',
-  backgroundSecondary: '#a9a9a9',
-  backgroundTertiary: '#d3d3d3',
-  //   colorPrimary: '#000000',
-  colorPrimary: '#121212',
-  colorSecondary: '#1f1f1f',
-  colorTertiary: '#969696',
-  quranWordColor: '#000000',
+  backgroundPrimary: 'hsla(0, 100%, 100%, 1)',
+  backgroundSecondary: 'hsla(0, 0%, 66%, 1)',
+  backgroundTertiary: 'hsla(0, 0%, 83%, 1)',
+  colorPrimary: 'hsla(0, 0%, 7%, 1)',
+  colorSecondary: 'hsla(0, 0%, 39%, 1)',
+  colorTertiary: 'hsla(0, 0%, 59%, 1)',
+  quranWordColor: 'hsla(0, 0%, 0%, 1)', // #000000
+  quranWordBackgroundColor: 'hsla(0, 0%, 90%, 1)',
 };
 
 // Dark theme colors
 export const darkColors: Color = {
-  //   backgroundPrimary: '#000000',
-  backgroundPrimary: '#121212',
-  backgroundSecondary: '#212121',
-  backgroundTertiary: '#2b2b2b',
-  colorPrimary: '#FFFFFF',
-  colorSecondary: '#d3d3d3',
-  colorTertiary: '#a9a9a9',
-  quranWordColor: '#FFFFFF',
+  backgroundPrimary: 'hsla(0, 0%, 7%, 1)',
+  backgroundSecondary: 'hsla(0, 0%, 13%, 1)',
+  backgroundTertiary: 'hsla(0, 0%, 17%, 1)',
+  colorPrimary: 'hsla(0, 100%, 100%, 1)',
+  colorSecondary: 'hsla(0, 0%, 83%, 1)',
+  colorTertiary: 'hsla(0, 0%, 66%, 1)',
+  quranWordColor: 'hsla(0, 100%, 100%, 1)',
+  quranWordBackgroundColor: 'hsla(0, 0%, 20%, 1)',
 };

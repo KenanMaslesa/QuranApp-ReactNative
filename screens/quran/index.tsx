@@ -1,6 +1,13 @@
 import React, {useEffect} from 'react';
 import {useRef} from 'react';
-import {StyleSheet, FlatList, View, ScrollView, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  ScrollView,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import QuranPage from './components/QuranPage';
@@ -13,7 +20,7 @@ import {quranService} from '../../services/quranService';
 import {PageInfo} from '../../shared/models';
 import {createArray} from '../../utils/createArray';
 import useThemeColor from '../../style/useTheme';
-import {navigationBarService} from '../../services/navigationBarService';
+import {systemNavigationBarService} from '../../services/systemNavigationBarService';
 
 interface FlatListViewableItem {
   index: number;
@@ -36,19 +43,11 @@ const QuranScreen = ({route}: any) => {
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    // todo: is this good approach?
-    if (showHeader) {
-      navigationBarService.showNavigation();
-    } else {
-      navigationBarService.hideNavigation();
-    }
-  }, [showHeader]);
-
-  useEffect(() => {
     dispatch(headerActions.setShowHeader(true));
     setTimeout(() => {
       dispatch(headerActions.setShowHeader(false));
-    }, 3000);
+      systemNavigationBarService.stickyImmersive();
+    }, 2000);
   }, []);
 
   useEffect(() => {
@@ -128,6 +127,8 @@ const QuranScreen = ({route}: any) => {
 };
 
 const {width, height} = Dimensions.get('screen');
+const statusBarHight =
+  StatusBar.currentHeight !== undefined ? StatusBar.currentHeight : 0;
 
 const styles = StyleSheet.create({
   container: {
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'gray',
     borderWidth: 0.2,
-    height: height,
+    height: height - statusBarHight,
     width,
   },
 });

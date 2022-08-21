@@ -9,15 +9,21 @@ import {useEffect} from 'react';
 import {CHANNELS, NotificationService} from '../services/notifications';
 import Loader from '../shared/components/Loader';
 import useThemeColor from '../style/useTheme';
+import {useFocusEffect} from '@react-navigation/native';
+import {systemNavigationBarService} from '../services/systemNavigationBarService';
 
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabsNavigator = () => {
-  const [themeColorStyle, themeColors] = useThemeColor();
+  const [, themeColors] = useThemeColor();
 
   useEffect(() => {
     NotificationService.createChannel(CHANNELS.Quran);
   }, []);
+
+  useFocusEffect(() => {
+    systemNavigationBarService.showNavigation();
+  });
 
   return (
     <>

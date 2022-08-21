@@ -120,11 +120,12 @@ const QuranPage = ({page}: QuranPageProps) => {
                   style={{
                     fontSize: quranFontSize,
                     fontFamily: `p${page}`,
-                    color:
+                    color: themeColors.quranWordColor,
+                    backgroundColor:
                       playingAyahIndex === word?.ayahIndex ||
                       playingWord === word?.audio
-                        ? 'blue'
-                        : themeColors.quranWordColor,
+                        ? themeColors.quranWordBackgroundColor
+                        : themeColors.backgroundPrimary,
                   }}
                   key={word?.codeV1}
                   onPress={() => playWord(word)}
@@ -152,17 +153,17 @@ const styles = StyleSheet.create({
   },
   juzInfo: {
     position: 'absolute',
-    top: 35,
+    top: 15,
     right: 10,
   },
   suraInfo: {
     position: 'absolute',
-    top: 35,
+    top: 15,
     left: 10,
   },
   pageInfo: {
     position: 'absolute',
-    bottom: 45,
+    bottom: 17,
   },
   bismillah: {
     fontFamily: 'bismillah',
@@ -173,7 +174,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flexWrap: 'wrap',
     padding: 3,
     width: width,
   },
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressableContainer: {
+    width,
     height,
     justifyContent: 'center',
     alignItems: 'center',

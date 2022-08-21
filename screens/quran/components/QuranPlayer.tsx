@@ -10,7 +10,6 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import SelectDropdownWithSearch from 'react-native-select-dropdown-with-search';
-const {width, height} = Dimensions.get('screen');
 
 import {qariList} from '../../../data/data';
 import SoundPlayer from 'react-native-sound-player';
@@ -29,6 +28,7 @@ import useThemeColor from '../../../style/useTheme';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PLAYER_ICONS_SIZE = 25;
+const {width, height} = Dimensions.get('screen');
 interface SelectDropdownItem {
   name: string;
   value: string;
@@ -36,7 +36,7 @@ interface SelectDropdownItem {
 const QuranPlayer = () => {
   const dispatch = useDispatch();
   const [themeColorStyle] = useThemeColor();
-
+  const ICONS_COLOR = themeColorStyle.colorSecondary;
   const {isPlaying, isStoped, selectedQari, playingAyahIndex, repeatNumber} =
     useSelector((state: State) => state.quranPlayer);
   const [
@@ -132,7 +132,7 @@ const QuranPlayer = () => {
             onPress={() => stopPlaying()}>
             <Ionicons
               name={'stop'}
-              style={themeColorStyle.colorPrimary}
+              style={ICONS_COLOR}
               size={PLAYER_ICONS_SIZE}
             />
           </TouchableOpacity>
@@ -142,7 +142,7 @@ const QuranPlayer = () => {
             onPress={() => playPreviousAyah()}>
             <Ionicons
               name={'play-skip-back'}
-              style={themeColorStyle.colorPrimary}
+              style={ICONS_COLOR}
               size={PLAYER_ICONS_SIZE}
             />
           </TouchableOpacity>
@@ -153,7 +153,7 @@ const QuranPlayer = () => {
               onPress={() => pausePlaying()}>
               <Ionicons
                 name={'pause'}
-                style={themeColorStyle.colorPrimary}
+                style={ICONS_COLOR}
                 size={PLAYER_ICONS_SIZE}
               />
             </TouchableOpacity>
@@ -163,7 +163,7 @@ const QuranPlayer = () => {
               onPress={() => resumePlaying()}>
               <Ionicons
                 name={'play'}
-                style={themeColorStyle.colorPrimary}
+                style={ICONS_COLOR}
                 size={PLAYER_ICONS_SIZE}
               />
             </TouchableOpacity>
@@ -174,7 +174,7 @@ const QuranPlayer = () => {
             onPress={() => playNextAyah()}>
             <Ionicons
               name={'play-skip-forward'}
-              style={themeColorStyle.colorPrimary}
+              style={ICONS_COLOR}
               size={PLAYER_ICONS_SIZE}
             />
           </TouchableOpacity>
@@ -189,7 +189,7 @@ const QuranPlayer = () => {
                     ? 'repeat-off'
                     : 'repeat'
                 }
-                style={themeColorStyle.colorPrimary}
+                style={ICONS_COLOR}
                 size={PLAYER_ICONS_SIZE}
               />
               {repeatNumber !== REPEAT_OPTIONS.NO_REPEAT &&
@@ -203,7 +203,7 @@ const QuranPlayer = () => {
           <TouchableOpacity style={styles.playerIcon}>
             <Ionicons
               name={'settings'}
-              style={themeColorStyle.colorPrimary}
+              style={ICONS_COLOR}
               size={PLAYER_ICONS_SIZE}
             />
           </TouchableOpacity>

@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {setTheme} from '../redux/actions/themeActions';
 import {State} from '../redux/store';
-import {navigationBarService} from '../services/navigationBarService';
+import {systemNavigationBarService} from '../services/systemNavigationBarService';
 import useThemeColor from './useTheme';
 
 export const ToggleTheme = () => {
@@ -14,19 +14,20 @@ export const ToggleTheme = () => {
   const {isDarkTheme} = useSelector((state: State) => state.theme);
 
   useEffect(() => {
-    // todo: investigate why don'y work in toggleTheme
-    navigationBarService.setNavigationColor(
-      themeColors.backgroundPrimary,
-      !isDarkTheme,
-    );
+    // todo: investigate why doesn't work in toggleTheme
+    changeNavigationAndBarColor();
   }, [isDarkTheme]);
 
   const toggleTheme = () => {
-    // navigationBarService.setNavigationColor(
-    //   themeColors.backgroundPrimary,
-    //   !isDarkTheme,
-    // );
     dispatch(setTheme(!isDarkTheme));
+    // changeNavigationAndBarColor(); // todo: investigate why doesn't work here
+  };
+
+  const changeNavigationAndBarColor = () => {
+    systemNavigationBarService.setNavigationAndBarColor(
+      themeColors.backgroundPrimary,
+      isDarkTheme,
+    );
   };
 
   return (
