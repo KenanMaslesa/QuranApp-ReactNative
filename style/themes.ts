@@ -13,7 +13,7 @@ export interface Color {
 export const lightColors: Color = {
   backgroundPrimary: 'hsla(0, 100%, 100%, 1)',
   backgroundSecondary: 'hsla(0, 0%, 66%, 1)',
-  backgroundTertiary: 'hsla(0, 0%, 83%, 1)',
+  backgroundTertiary: 'hsla(0, 0%, 90%, 1)',
   colorPrimary: 'hsla(0, 0%, 7%, 1)',
   colorSecondary: 'hsla(0, 0%, 39%, 1)',
   colorTertiary: 'hsla(0, 0%, 59%, 1)',
