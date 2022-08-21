@@ -26,6 +26,7 @@
     "react-native-gesture-handler": "^2.5.0",
     "react-native-idle-timer": "^2.1.7",
     "react-native-modalize": "^2.0.13",
+    "react-native-navigation-bar-color": "^2.0.1",
     "react-native-pager-view": "^5.4.25",
     "react-native-popover-view": "^5.1.2",
     "react-native-push-notification": "^8.1.1",

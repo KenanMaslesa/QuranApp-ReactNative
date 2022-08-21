@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   pageInfo: {
     position: 'absolute',
-    bottom: 35,
+    bottom: 45,
   },
   bismillah: {
     fontFamily: 'bismillah',

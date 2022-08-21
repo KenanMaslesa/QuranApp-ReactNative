@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     IdleTimerManager.setIdleTimerDisabled(true); // prevent screen sleep
     dispatch(getTheme());
-  }, []);
+  }, [dispatch]);
 
   return (
     <NavigationContainer onReady={() => SplashScreen.hide()}>

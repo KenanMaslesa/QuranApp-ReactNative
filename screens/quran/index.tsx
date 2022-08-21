@@ -13,6 +13,7 @@ import {quranService} from '../../services/quranService';
 import {PageInfo} from '../../shared/models';
 import {createArray} from '../../utils/createArray';
 import useThemeColor from '../../style/useTheme';
+import {navigationBarService} from '../../services/navigationBarService';
 
 interface FlatListViewableItem {
   index: number;
@@ -24,7 +25,7 @@ interface FlatListViewableItem {
 
 const QuranScreen = ({route}: any) => {
   const dispatch = useDispatch();
-  const [themeColorStyle] = useThemeColor();
+  const [themeColorStyle, themeColors] = useThemeColor();
 
   const {currentPage, showTranslation, scrollToPage} = useSelector(
     (state: State) => state.quran,
@@ -33,6 +34,15 @@ const QuranScreen = ({route}: any) => {
 
   const pages = createArray(1, 604);
   const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    // todo: is this good approach?
+    if (showHeader) {
+      navigationBarService.showNavigation();
+    } else {
+      navigationBarService.hideNavigation();
+    }
+  }, [showHeader]);
 
   useEffect(() => {
     dispatch(headerActions.setShowHeader(true));
@@ -123,7 +133,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'scroll',
     flex: 1,
   },
   page: {
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'gray',
     borderWidth: 0.2,
-    height: height - 55,
+    height: height,
     width,
   },
 });

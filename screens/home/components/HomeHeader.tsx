@@ -12,6 +12,7 @@ import {State} from '../../../redux/store';
 import {SCREENS} from '../../constants';
 import {randomNumberInRange} from '../../../utils/randomNumberInRange';
 import useThemeColor from '../../../style/useTheme';
+import {ToggleTheme} from '../../../style/ToggleTheme';
 
 const HomeHeader = () => {
   const navigation = useNavigation();
@@ -34,7 +35,9 @@ const HomeHeader = () => {
   return (
     <View style={[styles.headerContainer, themeColorStyle.backgroundPrimary]}>
       <Text style={[styles.appName, themeColorStyle.colorPrimary]}>Kur'an</Text>
-
+      <View style={styles.themeIcon}>
+        <ToggleTheme />
+      </View>
       <TouchableOpacity
         style={styles.bookIcon}
         onPress={() => goToLastVisitedPage()}>
@@ -118,6 +121,11 @@ const styles = StyleSheet.create({
   popoverIcon: {
     position: 'absolute',
     right: 10,
+    top: '50%',
+  },
+  themeIcon: {
+    position: 'absolute',
+    right: 150,
     top: '50%',
   },
   popoverContainer: {

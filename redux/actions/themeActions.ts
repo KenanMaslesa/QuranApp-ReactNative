@@ -9,9 +9,8 @@ export const getTheme = (): any => {
     asyncStorageService
       .getData(ASYNC_STORAGE_KEYS.APP_THEME)
       .then((isDark: boolean) => {
-        if (isDark) {
+        if (isDark !== null) {
           dispatch(themeActions.setIsDarkTheme(isDark));
-        } else {
         }
       });
   };
