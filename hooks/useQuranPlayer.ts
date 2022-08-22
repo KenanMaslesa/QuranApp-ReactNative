@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {EmitterSubscription} from 'react-native';
 import SoundPlayer from 'react-native-sound-player'; //https://www.npmjs.com/package/react-native-sound-player
 import {useDispatch, useSelector} from 'react-redux';
@@ -37,30 +37,31 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
   );
   const {currentPage} = useSelector((state: State) => state.quran);
 
-  const playAyahAudio = async (
-    ayahIndex: number | undefined,
-    calledByUser: boolean = true,
-  ) => {
-    if (calledByUser) {
-      repeatAyahCounter = 0;
-    }
-    resetPlayingAyahAndWord();
-    playingAyahIndexTemp = ayahIndex ? ayahIndex : -1;
-    dispatch(quranPlayerActions.setPlayingAyahIndex(ayahIndex));
+  const playAyahAudio = useCallback(
+    async (ayahIndex: number | undefined, calledByUser: boolean = true) => {
+      if (calledByUser) {
+        repeatAyahCounter = 0;
+      }
+      resetPlayingAyahAndWord();
+      playingAyahIndexTemp = ayahIndex ? ayahIndex : -1;
+      dispatch(quranPlayerActions.setPlayingAyahIndex(ayahIndex));
 
-    const ayahDetails = quranService.getAyatDetailsByAyahIndex(ayahIndex);
-    if (ayahDetails.page && ayahDetails.page !== currentPage) {
-      dispatch(quranActions.setScrollToPage(ayahDetails.page));
-    }
-    const suraOfAyah = ayahDetails.sura;
-    const ayaNumber = ayahDetails.ayaNumber;
-    const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
-    const audioUrl = `https://www.everyayah.com/data/${selectedQari.value}/${sura_ayah}.mp3`;
+      const ayahDetails = quranService.getAyatDetailsByAyahIndex(ayahIndex);
+      if (ayahDetails.page && ayahDetails.page !== currentPage) {
+        console.log('playAyahAudio');
+        dispatch(quranActions.setScrollToPage(ayahDetails.page));
+      }
+      const suraOfAyah = ayahDetails.sura;
+      const ayaNumber = ayahDetails.ayaNumber;
+      const sura_ayah = formatNumberForAudioUrl(`${suraOfAyah}:${ayaNumber}`);
+      const audioUrl = `https://www.everyayah.com/data/${selectedQari.value}/${sura_ayah}.mp3`;
 
-    playAyah(audioUrl);
-  };
+      playAyah(audioUrl);
+    },
+    [],
+  );
 
-  const playAyah = async (ayahUrl: string) => {
+  const playAyah = useCallback(async (ayahUrl: string) => {
     dispatch(quranPlayerActions.setIsStoped(false));
     dispatch(quranPlayerActions.setIsPlaying(true));
     isFinishedPlaying = false;
@@ -101,7 +102,7 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
     } catch (error) {
       console.log('cannot play', error);
     }
-  };
+  }, []);
 
   const resetPlayingAyahAndWord = () => {
     dispatch(quranPlayerActions.setPlayingAyahIndex(0));
@@ -114,7 +115,7 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
     subscriptionSoundPlayer.remove();
   };
 
-  const playWord = (word: Word | null) => {
+  const playWord = useCallback((word: Word | null) => {
     resetPlayingAyahAndWord();
     if (subscriptionSoundPlayer) {
       subscriptionSoundPlayer.remove();
@@ -137,7 +138,7 @@ const useQuranPlayer = (): QuranPlayerReturnType => {
     } catch (error) {
       console.log('cannot play', error);
     }
-  };
+  }, []);
 
   return [
     playAyahAudio,

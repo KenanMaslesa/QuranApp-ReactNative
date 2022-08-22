@@ -1,10 +1,13 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import useThemeColor from '../../style/useTheme';
 
 const Loader = () => {
+  const [themeColorStyle, themeColors] = useThemeColor();
+
   return (
-    <View style={styles.container}>
-      <ActivityIndicator color={'blue'} size={50} />
+    <View style={[styles.container, themeColorStyle.backgroundPrimary]}>
+      <ActivityIndicator color={themeColors.colorSecondary} size={50} />
     </View>
   );
 };
@@ -22,6 +25,5 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 99,
-    backgroundColor: '#0003',
   },
 });

@@ -41,8 +41,8 @@ const QuranPlayer = () => {
     useSelector((state: State) => state.quranPlayer);
   const [
     playAyahAudio,
-    playWord,
-    playingWord,
+    ,
+    ,
     resetPlayingAyahAndWord,
     stopPlayerAndRemoveSubscription,
   ] = useQuranPlayer();
@@ -52,7 +52,7 @@ const QuranPlayer = () => {
   }, []);
 
   const stopPlaying = () => {
-    SoundPlayer.stop();
+    stopPlayerAndRemoveSubscription();
     dispatch(quranPlayerActions.setIsPlaying(false));
     dispatch(quranPlayerActions.setIsStoped(true));
     resetPlayingAyahAndWord();
