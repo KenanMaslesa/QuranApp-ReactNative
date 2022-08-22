@@ -47,13 +47,11 @@ const quranPlayerSlice = createSlice({
       state.isStoped = payload;
     },
     toggleRepeatNumber: state => {
+      state.repeatNumber = state.repeatNumber + 1;
       if (state.repeatNumber === REPEAT_OPTIONS.INFINITY) {
         state.repeatNumber = REPEAT_OPTIONS.INFINITY;
-      }
-      if (state.repeatNumber >= REPEAT_OPTIONS.INFINITY) {
+      } else if (state.repeatNumber >= REPEAT_OPTIONS.INFINITY) {
         state.repeatNumber = REPEAT_OPTIONS.NO_REPEAT;
-      } else {
-        state.repeatNumber = state.repeatNumber + 1;
       }
     },
   },

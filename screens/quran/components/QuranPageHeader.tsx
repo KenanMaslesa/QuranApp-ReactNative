@@ -40,7 +40,25 @@ const QuranPageHeader = () => {
     top: showHeader ? 0 : -100,
   };
 
-  const addPageToBookmark = () => {
+  const toggleBookmark = () => {
+    const alreadyExist: boolean = bookmarks.some(
+      (bookmark: Bookmark) => bookmark.pageNumber === pageInfo.currentPage,
+    );
+    if (alreadyExist) {
+      removeCurrentPageFromBookmarks();
+      return;
+    }
+    addCurrentPageToBookmarks();
+  };
+
+  const removeCurrentPageFromBookmarks = () => {
+    const newBookmarks = bookmarks.filter(
+      bookmark => bookmark.pageNumber !== pageInfo.currentPage,
+    );
+    dispatch(setBookmarks([...newBookmarks]));
+  };
+
+  const addCurrentPageToBookmarks = () => {
     const date = new Date();
     const newBookmark: Bookmark = {
       sura: pageInfo.currentSura[0],
@@ -92,7 +110,9 @@ const QuranPageHeader = () => {
         </>
       </View>
 
-      <TouchableOpacity style={styles.bookmark} onPress={addPageToBookmark}>
+      <TouchableOpacity
+        style={styles.bookmark}
+        onPress={() => toggleBookmark()}>
         <Ionicons
           name={isPageInBookmarks() ? 'bookmark' : 'bookmark-outline'}
           style={themeColorStyle.colorPrimary}

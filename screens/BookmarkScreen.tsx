@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
-import {getBookmarks} from '../redux/actions/bookmarksActions';
+import {getBookmarks, setBookmarks} from '../redux/actions/bookmarksActions';
 import {bookmarkActions} from '../redux/slices/bookmarksSlice';
 import {State} from '../redux/store';
 import {asyncStorageService} from '../services/asyncStorageService';
@@ -21,17 +21,25 @@ import {SCREENS} from './constants';
 const BookmarkScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
   const [themeColorStyle] = useThemeColor();
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const bookmarks = useSelector((state: State) => state.bookmark.bookmarks);
+
+  useEffect(() => {
+    dispatch(getBookmarks());
+  }, []);
 
   const removeAllBookmarsk = () => {
     asyncStorageService.removeData(ASYNC_STORAGE_KEYS.BOOKMARKS);
     dispatch(bookmarkActions.removeAllBookmarks());
   };
 
-  useEffect(() => {
-    dispatch(getBookmarks());
-  }, [dispatch]);
+  const removeCurrentPageFromBookmarks = (pageNumber: number) => {
+    const newBookmarks = bookmarks.filter(
+      bookmark => bookmark.pageNumber !== pageNumber,
+    );
+    dispatch(setBookmarks([...newBookmarks]));
+  };
 
   return (
     <ScrollView style={themeColorStyle.backgroundPrimary}>
@@ -39,17 +47,32 @@ const BookmarkScreen = ({navigation}: any) => {
         {bookmarks.map((bookmark: Bookmark) => (
           <TouchableHighlight
             key={bookmark.pageNumber}
+            onLongPress={() => setShowDeleteButton(current => !current)}
             onPress={() => {
-              navigation.navigate(SCREENS.QURAN_SCREEN, {
-                startPage: bookmark.pageNumber,
-              });
+              if (showDeleteButton) {
+                removeCurrentPageFromBookmarks(bookmark.pageNumber);
+              } else {
+                navigation.navigate(SCREENS.QURAN_SCREEN, {
+                  startPage: bookmark.pageNumber,
+                });
+              }
             }}>
-            <View style={styles.bookmarkItem}>
-              <Ionicons
-                style={[styles.bookmarkIcon, themeColorStyle.colorTertiary]}
-                name={'bookmark'}
-                size={30}
-              />
+            <View
+              style={[styles.bookmarkItem, themeColorStyle.backgroundPrimary]}>
+              {showDeleteButton ? (
+                <Ionicons
+                  style={[styles.bookmarkIcon]}
+                  name={'trash'}
+                  color={'red'}
+                  size={30}
+                />
+              ) : (
+                <Ionicons
+                  style={[styles.bookmarkIcon, themeColorStyle.colorTertiary]}
+                  name={'bookmark'}
+                  size={30}
+                />
+              )}
               <View>
                 <Text style={[styles.suraName, themeColorStyle.colorPrimary]}>
                   {bookmark.sura.bosnianTranscription}
@@ -74,16 +97,17 @@ const BookmarkScreen = ({navigation}: any) => {
           </TouchableHighlight>
         ))}
 
-        {bookmarks.length > 1 && (
-          <View style={styles.center}>
-            <TouchableOpacity onPress={removeAllBookmarsk}>
+        {bookmarks.length > 1 && showDeleteButton && (
+          <TouchableOpacity onPress={removeAllBookmarsk}>
+            <View style={styles.center}>
               <Ionicons
                 style={[styles.bookmarkIcon, themeColorStyle.colorTertiary]}
                 name={'trash'}
                 size={30}
               />
-            </TouchableOpacity>
-          </View>
+              <Text style={themeColorStyle.colorPrimary}>REMOVE ALL</Text>
+            </View>
+          </TouchableOpacity>
         )}
       </>
     </ScrollView>

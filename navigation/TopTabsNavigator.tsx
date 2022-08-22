@@ -9,8 +9,6 @@ import {useEffect} from 'react';
 import {CHANNELS, NotificationService} from '../services/notifications';
 import Loader from '../shared/components/Loader';
 import useThemeColor from '../style/useTheme';
-import {useFocusEffect} from '@react-navigation/native';
-import {systemNavigationBarService} from '../services/systemNavigationBarService';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,9 +19,9 @@ const TopTabsNavigator = () => {
     NotificationService.createChannel(CHANNELS.Quran);
   }, []);
 
-  useFocusEffect(() => {
-    systemNavigationBarService.showNavigation();
-  });
+  // useFocusEffect(() => {
+  //   systemNavigationBarService.showNavigation();
+  // });
 
   return (
     <>
@@ -38,7 +36,7 @@ const TopTabsNavigator = () => {
             height: 4,
             borderRadius: 5,
           },
-          lazy: false,
+          lazy: true,
           lazyPlaceholder: () => {
             return <Loader />;
           },

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRef} from 'react';
 import {
   StyleSheet,
@@ -21,6 +21,7 @@ import {PageInfo} from '../../shared/models';
 import {createArray} from '../../utils/createArray';
 import useThemeColor from '../../style/useTheme';
 import {systemNavigationBarService} from '../../services/systemNavigationBarService';
+import Loader from '../../shared/components/Loader';
 
 interface FlatListViewableItem {
   index: number;
@@ -30,7 +31,7 @@ interface FlatListViewableItem {
   key: string;
 }
 
-const QuranScreen = ({route}: any) => {
+const QuranScreen = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const [themeColorStyle, themeColors] = useThemeColor();
 
@@ -41,20 +42,30 @@ const QuranScreen = ({route}: any) => {
 
   const pages = createArray(1, 604);
   const flatListRef = useRef<FlatList>(null);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
 
   useEffect(() => {
-    dispatch(headerActions.setShowHeader(true));
-    setTimeout(() => {
-      dispatch(headerActions.setShowHeader(false));
-      systemNavigationBarService.stickyImmersive();
-    }, 2000);
-  }, []);
+    const unsubscribe = navigation.addListener('transitionEnd', (e: any) => {
+      console.log('transitionEnd:', e);
+      setShowLoader(false);
+      showAndHideHeader();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (scrollToPage >= 0) {
       scrollTo(scrollToPage);
+      console.log('scrollTo:', scrollToPage);
     }
   }, [scrollToPage]);
+
+  const showAndHideHeader = () => {
+    dispatch(headerActions.setShowHeader(true));
+    setTimeout(() => {
+      dispatch(headerActions.setShowHeader(false));
+    }, 2000);
+  };
 
   const scrollTo = (pageNumber: number) => {
     flatListRef.current?.scrollToIndex({
@@ -81,7 +92,7 @@ const QuranScreen = ({route}: any) => {
   });
 
   const _viewabilityConfig = {
-    itemVisiblePercentThreshold: 70, //70 means that item is considered visible if it is visible for more than 70 percents.
+    itemVisiblePercentThreshold: 30, //30 means that item is considered visible if it is visible for more than 30 percents.
   };
 
   const getPageInfoAndSetHeaderInfo = (pageNumber: number) => {
@@ -97,27 +108,31 @@ const QuranScreen = ({route}: any) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        viewabilityConfig={_viewabilityConfig}
-        onViewableItemsChanged={onViewableItemsChanged.current}
-        initialScrollIndex={route.params.startPage - 1}
-        ref={flatListRef}
-        initialNumToRender={3}
-        maxToRenderPerBatch={2}
-        windowSize={5} // https://reactnative.dev/docs/optimizing-flatlist-configuration#windowsize
-        data={pages}
-        inverted
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled={true}
-        getItemLayout={(data, index) => ({
-          length: width,
-          offset: width * index,
-          index,
-        })}
-        keyExtractor={item => `pageId:${item}`}
-        renderItem={renderItem}
-      />
+      {showLoader ? (
+        <Loader />
+      ) : (
+        <FlatList
+          viewabilityConfig={_viewabilityConfig}
+          onViewableItemsChanged={onViewableItemsChanged.current}
+          initialScrollIndex={route.params.startPage - 1}
+          ref={flatListRef}
+          initialNumToRender={1}
+          maxToRenderPerBatch={1}
+          windowSize={2} // https://reactnative.dev/docs/optimizing-flatlist-configuration#windowsize
+          data={pages}
+          inverted
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled={true}
+          getItemLayout={(data, index) => ({
+            length: width,
+            offset: width * index,
+            index,
+          })}
+          keyExtractor={item => `pageId:${item}`}
+          renderItem={renderItem}
+        />
+      )}
       {showTranslation && (
         <QuranTranslationBottomSheet pageNumber={currentPage} />
       )}
