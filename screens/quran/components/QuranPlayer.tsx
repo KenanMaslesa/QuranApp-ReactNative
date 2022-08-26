@@ -35,7 +35,7 @@ interface SelectDropdownItem {
 }
 const QuranPlayer = () => {
   const dispatch = useDispatch();
-  const [themeColorStyle] = useThemeColor();
+  const [themeColorStyle, themeColors] = useThemeColor();
   const ICONS_COLOR = themeColorStyle.colorSecondary;
   const {isPlaying, isStoped, selectedQari, playingAyahIndex, repeatNumber} =
     useSelector((state: State) => state.quranPlayer);
@@ -46,6 +46,12 @@ const QuranPlayer = () => {
     resetPlayingAyahAndWord,
     stopPlayerAndRemoveSubscription,
   ] = useQuranPlayer();
+
+  const dropdownStyle = {
+    width: width - 120,
+    height: height - 120,
+    backgroundColor: themeColors.backgroundPrimary,
+  };
 
   useEffect(() => {
     dispatch(getSelectedQari());
@@ -110,10 +116,7 @@ const QuranPlayer = () => {
             }}
             buttonStyle={styles.dropdownButtonStyle}
             buttonTextStyle={themeColorStyle.colorPrimary}
-            dropdownStyle={[
-              styles.dropdownStyle,
-              themeColorStyle.backgroundTertiary,
-            ]}
+            dropdownStyle={dropdownStyle}
             rowStyle={[
               styles.dropdownRowStyle,
               themeColorStyle.backgroundPrimary,
@@ -237,7 +240,7 @@ const styles = StyleSheet.create({
   },
   dropdownStyle: {
     width: width - 120,
-    height: height - 200,
+    height: height - 120,
   },
   dropdownButtonStyle: {
     backgroundColor: 'transparent',
