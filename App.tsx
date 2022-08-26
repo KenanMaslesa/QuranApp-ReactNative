@@ -1,23 +1,34 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import StackNavigator from './navigation/StackNavigator';
-import SplashScreen from 'react-native-splash-screen';
 import IdleTimerManager from 'react-native-idle-timer';
 import {useDispatch} from 'react-redux';
 import {getTheme} from './redux/actions/themeActions';
 import {systemNavigationBarService} from './services/systemNavigationBarService';
+import {Appearance} from 'react-native';
 
 const App = () => {
   const dispatch = useDispatch();
+  const [preferedTheme, setPreferedTheme] = useState(
+    Appearance.getColorScheme(),
+  );
 
   useEffect(() => {
+    dispatch(getTheme(preferedTheme));
     systemNavigationBarService.stickyImmersive();
     IdleTimerManager.setIdleTimerDisabled(true); // prevent screen sleep
-    dispatch(getTheme());
-  }, [dispatch]);
+
+    const preferedThemeSub = Appearance.addChangeListener(() => {
+      setPreferedTheme(Appearance.getColorScheme());
+    });
+
+    return () => {
+      preferedThemeSub.remove();
+    };
+  }, [dispatch, preferedTheme]);
 
   return (
-    <NavigationContainer onReady={() => SplashScreen.hide()}>
+    <NavigationContainer>
       <StackNavigator />
     </NavigationContainer>
   );
