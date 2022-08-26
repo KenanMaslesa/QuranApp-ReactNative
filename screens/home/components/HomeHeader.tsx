@@ -35,68 +35,75 @@ const HomeHeader = () => {
   return (
     <View style={[styles.headerContainer, themeColorStyle.backgroundPrimary]}>
       <Text style={[styles.appName, themeColorStyle.colorPrimary]}>Kur'an</Text>
-      <View style={styles.themeIcon}>
-        <ToggleTheme />
-      </View>
-      <TouchableOpacity
-        style={styles.bookIcon}
-        onPress={() => goToLastVisitedPage()}>
-        <Ionicons
-          name={'book-outline'}
-          size={24}
-          style={themeColorStyle.colorPrimary}
-        />
-      </TouchableOpacity>
-
-      <Ionicons
-        name={'search-outline'}
-        size={24}
-        style={[styles.searchIcon, themeColorStyle.colorPrimary]}
-      />
-
-      <Popover
-        mode={PopoverMode.RN_MODAL}
-        placement={PopoverPlacement.BOTTOM}
-        from={
-          <TouchableOpacity style={styles.popoverIcon}>
-            <Ionicons
-              name={'ellipsis-vertical'}
-              size={24}
-              style={themeColorStyle.colorPrimary}
-            />
-          </TouchableOpacity>
-        }>
-        <View style={styles.popoverContainer}>
-          <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
-            Idi na
-          </Text>
-
-          <TouchableOpacity
-            style={styles.popoverItem}
-            onPress={() => goToRandomPage()}>
-            <Text style={themeColorStyle.colorPrimary}>Random page</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(SCREENS.SETTINGS_SCREEN);
-            }}>
-            <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
-              Postavke
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
-            Pomoc
-          </Text>
-          <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
-            O name
-          </Text>
-          <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
-            Druge aplikacije
-          </Text>
+      <View style={styles.iconsContainer}>
+        <View style={styles.icon}>
+          <ToggleTheme />
         </View>
-      </Popover>
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => goToLastVisitedPage()}>
+          <Ionicons
+            name={'book-outline'}
+            size={24}
+            style={themeColorStyle.colorPrimary}
+          />
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity onPress={() => {}} style={styles.icon}>
+          <Ionicons
+            name={'search-outline'}
+            size={24}
+            style={themeColorStyle.colorPrimary}
+          />
+        </TouchableOpacity> */}
+        <Popover
+          mode={PopoverMode.RN_MODAL}
+          placement={PopoverPlacement.BOTTOM}
+          from={
+            <TouchableOpacity style={styles.icon}>
+              <Ionicons
+                name={'ellipsis-vertical'}
+                size={24}
+                style={themeColorStyle.colorPrimary}
+              />
+            </TouchableOpacity>
+          }>
+          <View
+            style={[
+              styles.popoverContainer,
+              themeColorStyle.backgroundPrimary,
+            ]}>
+            <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+              Idi na
+            </Text>
+
+            <TouchableOpacity
+              style={styles.popoverItem}
+              onPress={() => goToRandomPage()}>
+              <Text style={themeColorStyle.colorPrimary}>Random page</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(SCREENS.SETTINGS_SCREEN);
+              }}>
+              <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+                Postavke
+              </Text>
+            </TouchableOpacity>
+
+            <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+              Pomoc
+            </Text>
+            <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+              O name
+            </Text>
+            <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+              Druge aplikacije
+            </Text>
+          </View>
+        </Popover>
+      </View>
     </View>
   );
 };
@@ -108,25 +115,17 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   appName: {fontSize: 20, fontWeight: '500'},
-  bookIcon: {
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
-    right: 100,
-    top: '50%',
+    top: 0,
+    right: 0,
+    paddingTop: 5,
   },
-  searchIcon: {
-    position: 'absolute',
-    right: 50,
-    top: '50%',
-  },
-  popoverIcon: {
-    position: 'absolute',
-    right: 10,
-    top: '50%',
-  },
-  themeIcon: {
-    position: 'absolute',
-    right: 150,
-    top: '50%',
+  icon: {
+    padding: 10,
   },
   popoverContainer: {
     width: 200,
