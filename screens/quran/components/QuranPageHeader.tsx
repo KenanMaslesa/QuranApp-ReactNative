@@ -141,7 +141,7 @@ const QuranPageHeader = () => {
             style={styles.popoverItem}
             isChecked={showTranslation}
             fillColor={themeColors.backgroundSecondary}
-            unfillColor={themeColors.colorPrimary}
+            unfillColor={themeColors.backgroundPrimary}
             // eslint-disable-next-line react-native/no-inline-styles
             textStyle={{
               textDecorationLine: 'none',
