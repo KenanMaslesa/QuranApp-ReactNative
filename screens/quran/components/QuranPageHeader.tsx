@@ -27,7 +27,7 @@ import useThemeColor from '../../../style/useTheme';
 const QuranPageHeader = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [themeColorStyle] = useThemeColor();
+  const [themeColorStyle, themeColors] = useThemeColor();
 
   const {pageInfo, showHeader} = useSelector((state: State) => state.header);
   const bookmarks = useSelector((state: State) => state.bookmark.bookmarks);
@@ -134,29 +134,14 @@ const QuranPageHeader = () => {
             />
           </TouchableOpacity>
         }>
-        <View style={styles.popoverContainer}>
-          <BouncyCheckbox
-            size={25}
-            style={styles.popoverItem}
-            isChecked={isDarkTheme}
-            fillColor="blue"
-            unfillColor="#FFFFFF"
-            // eslint-disable-next-line react-native/no-inline-styles
-            textStyle={{
-              textDecorationLine: 'none',
-            }}
-            text="Dark mode"
-            onPress={(isChecked: boolean) => {
-              dispatch(setTheme(isChecked));
-            }}
-          />
-
+        <View
+          style={[styles.popoverContainer, themeColorStyle.backgroundPrimary]}>
           <BouncyCheckbox
             size={25}
             style={styles.popoverItem}
             isChecked={showTranslation}
-            fillColor="blue"
-            unfillColor="#FFFFFF"
+            fillColor={themeColors.backgroundSecondary}
+            unfillColor={themeColors.colorPrimary}
             // eslint-disable-next-line react-native/no-inline-styles
             textStyle={{
               textDecorationLine: 'none',
@@ -168,19 +153,39 @@ const QuranPageHeader = () => {
           />
 
           <View style={styles.fontSizeContainer}>
-            <Text>Font size:</Text>
+            <Text style={themeColorStyle.colorPrimary}>Font size:</Text>
             <Pressable
-              style={styles.fontSizeButton}
+              style={[
+                styles.fontSizeButton,
+                themeColorStyle.backgroundSecondary,
+              ]}
               onPress={() => dispatch(quranActions.setFontSize(fontSize - 1))}>
-              <Text style={styles.fontSizeButtonText}>-</Text>
+              <Text
+                style={[
+                  styles.fontSizeButtonText,
+                  themeColorStyle.colorPrimary,
+                ]}>
+                -
+              </Text>
             </Pressable>
 
-            <Text style={styles.quranFontSize}>{fontSize}</Text>
+            <Text style={[styles.quranFontSize, themeColorStyle.colorPrimary]}>
+              {fontSize}
+            </Text>
 
             <Pressable
-              style={styles.fontSizeButton}
+              style={[
+                styles.fontSizeButton,
+                themeColorStyle.backgroundSecondary,
+              ]}
               onPress={() => dispatch(quranActions.setFontSize(fontSize + 1))}>
-              <Text style={styles.fontSizeButtonText}>+</Text>
+              <Text
+                style={[
+                  styles.fontSizeButtonText,
+                  themeColorStyle.colorPrimary,
+                ]}>
+                +
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -239,7 +244,6 @@ const styles = StyleSheet.create({
   },
   fontSizeButton: {
     width: 30,
-    backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
@@ -247,7 +251,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   fontSizeButtonText: {
-    color: 'white',
     fontSize: 16,
   },
   quranFontSize: {
