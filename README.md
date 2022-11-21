@@ -1,6 +1,11 @@
 
 DEMO:
-Uploading demo.mp4…
+
+
+https://user-images.githubusercontent.com/55869934/203121241-18caa5c7-156a-4f5f-949a-befec53c271e.mp4
+
+
+
 
 RUN APP:
 1. npx react-native start
