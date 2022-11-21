@@ -8,6 +8,7 @@ import {SCREENS} from '../screens/constants';
 import Loader from '../shared/components/Loader';
 import {useSelector} from 'react-redux';
 import {State} from '../redux/store';
+import AudioTopTabsNavigator from './AudioTopTabsNavigator';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,10 @@ const StackNavigator = () => {
         <Stack.Screen
           name={SCREENS.SETTINGS_SCREEN}
           component={SettingsScreen}
+        />
+        <Stack.Screen
+          name={SCREENS.AUDIO_SCREEN}
+          component={AudioTopTabsNavigator}
         />
       </Stack.Navigator>
     </>

@@ -78,6 +78,15 @@ const HomeHeader = () => {
             </Text>
 
             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(SCREENS.AUDIO_SCREEN);
+              }}>
+              <Text style={[styles.popoverItem, themeColorStyle.colorPrimary]}>
+                Audio predavanja
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               style={styles.popoverItem}
               onPress={() => goToRandomPage()}>
               <Text style={themeColorStyle.colorPrimary}>Random page</Text>

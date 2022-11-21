@@ -13657,3 +13657,31 @@ export const months = [
   'Nov',
   'Dec',
 ];
+
+export const namesOfAllah = [
+  {
+    title: 'Ako ti nešto treba, prouči ovu dovu',
+    audio:
+      'https://ia801203.us.archive.org/10/items/TrebaTiNestoProuciOvuDovu/Treba%20ti%20ne%C5%A1to,%20prou%C4%8Di%20ovu%20dovu.mp3',
+  },
+  {
+    title: 'Hoćeš da ti bude oprošteno?!',
+    audio:
+      'https://ia801209.us.archive.org/6/items/HoeeDaTiBudeOprorteno/Ho%C4%87e%C5%A1%20da%20ti%20bude%20opro%C5%A1teno!.mp3',
+  },
+  {
+    title: 'Zašto si posustao u ibadetu',
+    audio:
+      'https://ia601200.us.archive.org/20/items/PitasSeZastoSiKlonuoUIbadetu/Pita%C5%A1%20se%20za%C5%A1to%20si%20klonuo%20u%20ibadetu.mp3',
+  },
+  {
+    title: 'Vrijednosti ibadeta',
+    audio:
+      'https://ia801207.us.archive.org/24/items/VrijednostIbadeta/Vrijednost%20ibadeta.mp3',
+  },
+  {
+    title: 'Oni čija će dobra djela biti pretvorena u prah',
+    audio:
+      'https://ia801202.us.archive.org/14/items/OniCijaCeDobraDjelaUPrahPretvorenaBiti/Oni%20%C4%8Dija%20%C4%87e%20dobra%20djela%20u%20prah%20pretvorena%20biti.mp3',
+  },
+];
